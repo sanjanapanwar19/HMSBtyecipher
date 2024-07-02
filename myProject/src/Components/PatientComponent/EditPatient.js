@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const EditPatient = ({ images, collaspeEvent }) => {
+  const [erros, setErros] = useState({});
   const { collasped, setCollasped } = collaspeEvent;
   const location = useLocation();
   const navigate = useNavigate();
@@ -24,12 +25,47 @@ const EditPatient = ({ images, collaspeEvent }) => {
       [name]: value,
     }));
   };
+  const validateValues = (patient) => {
+    let errors = {};
+
+    if (!patient.fullName) {
+      errors.fullName = "please enter the name of the patient";
+    }
+    if (!patient.email) {
+      errors.email = "please enter email";
+    }
+    if (!patient.dob) {
+      errors.dob = "please enter date of birth of the patient";
+    }
+    if (!patient.contactNumber) {
+      errors.contactNumber = "please enter contact number";
+    }
+    if (!patient.disease) {
+      errors.disease = "please enter disease";
+    }
+    if (!patient.bloodgroup) {
+      errors.bloodgroup = "please enter blood group";
+    }
+    if (!patient.gender) {
+      errors.gender = "please select your gender";
+    }
+    console.log("erros in the valid inputs", errors);
+    return errors;
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
-    const id = patientDetails._id;
-    console.log("id is", id);
     console.log("handle submit fun of edit patient");
     console.log("data is", patientDetails);
+    const err = validateValues(patientDetails);
+    console.log("err", err);
+    setErros(err);
+    const length = Object.keys(err).length;
+    if (length === 0) {
+      finishSubmiting();
+    }
+  };
+  const finishSubmiting = () => {
+    const id = patientDetails._id;
     const fun = async (req, res) => {
       try {
         const res = await axios.put(
@@ -113,6 +149,11 @@ const EditPatient = ({ images, collaspeEvent }) => {
                           value={patientDetails.fullName}
                           onChange={handleChange}
                         />
+                         {erros.fullName && (
+                          <p className="required-validation">
+                            {erros.fullName}
+                          </p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="email" class="custom-form-label">
@@ -123,9 +164,12 @@ const EditPatient = ({ images, collaspeEvent }) => {
                           class="custom-input-field"
                           id="email"
                           name="email"
-                          value={eachPatient.email}
+                          value={patientDetails.email}
                           onChange={handleChange}
                         />
+                         {erros.email && (
+                          <p className="required-validation">{erros.email}</p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="dateofbirth" class="custom-form-label">
@@ -138,9 +182,12 @@ const EditPatient = ({ images, collaspeEvent }) => {
                           id="dateofbirth"
                           name="dob"
                           placeholder="dd-mm-yyyy"
-                          value={eachPatient.dob}
+                          value={patientDetails.dob}
                           onChange={handleChange}
                         />
+                         {erros.dob && (
+                          <p className="required-validation">{erros.dob}</p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="contact-number" class="custom-form-label">
@@ -152,9 +199,14 @@ const EditPatient = ({ images, collaspeEvent }) => {
                           class="custom-input-field"
                           id="contact-number"
                           name="contactNumber"
-                          value={eachPatient.contactNumber}
+                          value={patientDetails.contactNumber}
                           onChange={handleChange}
                         />
+                          {erros.contactNumber && (
+                          <p className="required-validation">
+                            {erros.contactNumber}
+                          </p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="disease" class="custom-form-label">
@@ -165,9 +217,14 @@ const EditPatient = ({ images, collaspeEvent }) => {
                           class="custom-input-field"
                           id="disease"
                           name="disease"
-                          value={eachPatient.disease}
+                          value={patientDetails.disease}
                           onChange={handleChange}
                         />
+                         {erros.disease && (
+                          <p className="required-validation">
+                            {erros.disease}
+                          </p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="bloodgroup" class="custom-form-label">
@@ -177,10 +234,15 @@ const EditPatient = ({ images, collaspeEvent }) => {
                           type="text"
                           class="custom-input-field"
                           id="bloodgroup"
-                          name="blooggroup"
-                          value={eachPatient.bloodgroup}
+                          name="bloodgroup"
+                          value={patientDetails.bloodgroup}
                           onChange={handleChange}
                         />
+                         {erros.bloodgroup && (
+                          <p className="required-validation">
+                            {erros.bloodgroup}
+                          </p>
+                        )}
                       </div>
                       <div class="col-md-12">
                         <label for="gender" class="custom-form-label">
@@ -221,6 +283,9 @@ const EditPatient = ({ images, collaspeEvent }) => {
                             <label for="other">Other</label>
                           </div>
                         </span>
+                        {erros.gender && (
+                          <p className="required-validation">{erros.gender}</p>
+                        )}
                       </div>
 
                       <div class="col-md-8">
@@ -232,7 +297,7 @@ const EditPatient = ({ images, collaspeEvent }) => {
                           class="custom-input-field"
                           id="description"
                           name="description"
-                          value={eachPatient.description}
+                          value={patientDetails.description}
                           onChange={handleChange}
                           rows="6"
                         >

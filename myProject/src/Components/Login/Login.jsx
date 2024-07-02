@@ -1,23 +1,60 @@
 import axios from "axios";
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { Alert } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
 const Login = ({ images }) => {
-  const [email, setEmail] = useState("");
-  const [password, setpassword] = useState("");
-
+  // const [email, setEmail] = useState("");
+  // const [password, setpassword] = useState("");
+  const [type, setType] = useState("password");
+  const [icon, setIcon] = useState(images.offEye);
+  const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const [erros, setErros] = useState({});
   const navigate = useNavigate();
 
   axios.defaults.withCredentials = true;
+  const passwordToggle = () => {
+    if (type === "password") {
+      setIcon(images.eye);
+      setType("text");
+    } else {
+      setIcon(images.offEye);
+      setType("password");
+    }
+  };
+  const validateValues = (credentials) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let errors = {};
+    if (!credentials.email) {
+      errors.email = "please enter email";
+    } else if (!emailPattern.test(credentials.email)) {
+      errors.email = "please enter a valid email";
+    }
+    if (!credentials.password) {
+      errors.password = "please enter password";
+    }
+    console.log("erros in validate values", errors);
+    return errors;
+  };
+  const handleChange = (e) => {
+    setCredentials((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("handle submit function of login component has been called");
-    const credentials = {
-      email,
-      password,
-    };
+    console.log("credentials for login are", credentials);
+    const err = validateValues(credentials);
+    setErros(err);
+    const length = Object.keys(err).length;
+    if (length === 0) {
+      finishSubmiting();
+    }
+  };
+  const finishSubmiting = async () => {
     try {
       const res = await axios.post("/auth/login", credentials);
       console.log("response is", res);
@@ -29,7 +66,6 @@ const Login = ({ images }) => {
       console.log("error is", err);
     }
   };
-
   return (
     <div className="login">
       <div className="container-fluid">
@@ -55,27 +91,37 @@ const Login = ({ images }) => {
                       id="email"
                       placeholder="Enter Email"
                       name="email"
-                      value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                      }}
+                      value={credentials.email}
+                      onChange={handleChange}
                     />
+                    {erros.email && (
+                      <p className="required-validation">{erros.email}</p>
+                    )}
                   </div>
                   <div className="col-md-12">
                     <label for="password" className="custom-form-label">
                       Password
                     </label>
-                    <input
-                      type="test"
-                      className="custom-input-field"
-                      id="lastname"
-                      placeholder="Enter Password"
-                      name="password"
-                      value={password}
-                      onChange={(e) => {
-                        setpassword(e.target.value);
-                      }}
-                    />
+                    <div className="possionIconInput">
+                      <img
+                        onClick={passwordToggle}
+                        src={icon}
+                        alt=""
+                        class="eyeIconView"
+                      />
+                      <input
+                        type={type}
+                        className="custom-input-field"
+                        id="lastname"
+                        placeholder="Enter Password"
+                        name="password"
+                        value={credentials.password}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    {erros.password && (
+                      <p className="required-validation">{erros.password}</p>
+                    )}
                   </div>
                   <div className="forget-password">
                     <div className="form-check d-flex">

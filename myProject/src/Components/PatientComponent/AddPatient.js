@@ -13,42 +13,69 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 const Addpatient = ({ images, collaspeEvent }) => {
+  const [erros, setErros] = useState({});
+  const [submitting, setSubmitting] = useState(false);
   const { collasped, setCollasped } = collaspeEvent;
   const navigate = useNavigate();
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [dob, setDob] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
-  const [disease, setDiases] = useState("");
-  const [bloodgroup, setBloodGroup] = useState("");
-  const [gender, setGender] = useState("male");
-  const [description, setDescription] = useState("");
+  const [newpatient, setNewpatient] = useState({
+    fullName: "",
+    email: "",
+    dob: "",
+    contactNumber: "",
+    disease: "",
+    bloodgroup: "",
+    description: "",
+  });
 
+  const handleChange = (e) => {
+    setNewpatient((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const validateValues = (patient) => {
+    let errors = {};
+
+    if (!patient.fullName) {
+      errors.fullName = "please enter the name of the patient";
+    }
+    if (!patient.email) {
+      errors.email = "please enter email";
+    }
+    if (!patient.dob) {
+      errors.dob = "please enter date of birth of the patient";
+    }
+    if (!patient.contactNumber) {
+      errors.contactNumber = "please enter contact number";
+    }
+    if (!patient.disease) {
+      errors.disease = "please enter disease";
+    }
+    if (!patient.bloodgroup) {
+      errors.bloodgroup = "please enter blood group";
+    }
+    if (!patient.gender) {
+      errors.gender = "please select your gender";
+    }
+    console.log("erros in the valid inputs", errors);
+    return errors;
+  };
   const handlePatientSubmit = async (e) => {
     e.preventDefault();
-    console.log("handle patient Submit fun has been called");
-    console.log("patient name is", fullName);
-    console.log("email is", email);
-    console.log("dob is", dob);
-    console.log("contact number is", contactNumber);
-    console.log("disease is", disease);
-    console.log("blood group is", bloodgroup);
-    console.log("gender is", gender);
-    console.log("description is", description);
-
-    const newPatient = {
-      fullName,
-      email,
-      dob,
-      contactNumber,
-      disease,
-      bloodgroup,
-      gender,
-      description,
-    };
-    console.log("newPatient is", newPatient);
+    console.log("newPatient is", newpatient);
+    const err = validateValues(newpatient);
+    console.log("err", err);
+    setErros(err);
+    setSubmitting(true);
+    const length = Object.keys(err).length;
+    if (length === 0) {
+      finishSubmiting();
+    }
+  };
+  const finishSubmiting = async () => {
     try {
-      const res = await axios.post("/patient/addPatient", newPatient);
+      const res = await axios.post("/patient/addPatient", newpatient);
       console.log("res", res.data);
       if (res.data.status) {
         navigate("/patient");
@@ -58,7 +85,6 @@ const Addpatient = ({ images, collaspeEvent }) => {
       console.log("error is", err);
     }
   };
-
   return (
     <div class="wapper">
       <Sidebar images={images} collaspeEvent={{ collasped, setCollasped }} />
@@ -124,12 +150,16 @@ const Addpatient = ({ images, collaspeEvent }) => {
                           type="test"
                           class="custom-input-field"
                           id="fullname"
+                          name="fullName"
                           placeholder="Enter Full Name"
-                          value={fullName}
-                          onChange={(e) => {
-                            setFullName(e.target.value);
-                          }}
+                          value={newpatient.fullName}
+                          onChange={handleChange}
                         />
+                        {erros.fullName && (
+                          <p className="required-validation">
+                            {erros.fullName}
+                          </p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="email" class="custom-form-label">
@@ -139,12 +169,14 @@ const Addpatient = ({ images, collaspeEvent }) => {
                           type="email"
                           class="custom-input-field"
                           id="email"
+                          name="email"
                           placeholder="Enter Email"
-                          value={email}
-                          onChange={(e) => {
-                            setEmail(e.target.value);
-                          }}
+                          value={newpatient.email}
+                          onChange={handleChange}
                         />
+                        {erros.email && (
+                          <p className="required-validation">{erros.email}</p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="dateofbirth" class="custom-form-label">
@@ -155,11 +187,13 @@ const Addpatient = ({ images, collaspeEvent }) => {
                           type="date"
                           class="custom-input-field"
                           id="dateofbirth"
-                          value={dob}
-                          onChange={(e) => {
-                            setDob(e.target.value);
-                          }}
+                          name="dob"
+                          value={newpatient.dob}
+                          onChange={handleChange}
                         />
+                        {erros.dob && (
+                          <p className="required-validation">{erros.dob}</p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="contact-number" class="custom-form-label">
@@ -170,12 +204,16 @@ const Addpatient = ({ images, collaspeEvent }) => {
                           type="text"
                           class="custom-input-field"
                           id="contact-number"
+                          name="contactNumber"
                           placeholder="Enter Contect Nubmer"
-                          value={contactNumber}
-                          onChange={(e) => {
-                            setContactNumber(e.target.value);
-                          }}
+                          value={newpatient.contactNumber}
+                          onChange={handleChange}
                         />
+                        {erros.contactNumber && (
+                          <p className="required-validation">
+                            {erros.contactNumber}
+                          </p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="disease" class="custom-form-label">
@@ -185,12 +223,14 @@ const Addpatient = ({ images, collaspeEvent }) => {
                           type="text"
                           class="custom-input-field"
                           id="disease"
+                          name="disease"
                           placeholder="Enetr Disease"
-                          value={disease}
-                          onChange={(e) => {
-                            setDiases(e.target.value);
-                          }}
+                          value={newpatient.disease}
+                          onChange={handleChange}
                         />
+                        {erros.disease && (
+                          <p className="required-validation">{erros.disease}</p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="bloodgroup" class="custom-form-label">
@@ -200,12 +240,16 @@ const Addpatient = ({ images, collaspeEvent }) => {
                           type="text"
                           class="custom-input-field"
                           id="bloodgroup"
+                          name="bloodgroup"
                           placeholder="Enetr Blood Group"
-                          value={bloodgroup}
-                          onChange={(e) => {
-                            setBloodGroup(e.target.value);
-                          }}
+                          value={newpatient.bloodgroup}
+                          onChange={handleChange}
                         />
+                        {erros.bloodgroup && (
+                          <p className="required-validation">
+                            {erros.bloodgroup}
+                          </p>
+                        )}
                       </div>
                       <div class="col-md-12">
                         <label for="gender" class="custom-form-label">
@@ -218,12 +262,12 @@ const Addpatient = ({ images, collaspeEvent }) => {
                               type="radio"
                               name="gender"
                               value="male"
-                              checked={gender === "male"}
-                              onChange={(e) => {
-                                setGender(e.target.value);
-                              }}
+                              checked={newpatient.gender === "male"}
+                              onChange={handleChange}
                             />
-                            <label for="male">Male</label>
+                            <label className="ps-1" htmlFor="male">
+                              Male
+                            </label>
                           </div>
                           <div class="containGender">
                             <input
@@ -231,12 +275,12 @@ const Addpatient = ({ images, collaspeEvent }) => {
                               type="radio"
                               name="gender"
                               value="female"
-                              checked={gender === "female"}
-                              onChange={(e) => {
-                                setGender(e.target.value);
-                              }}
+                              checked={newpatient.gender === "female"}
+                              onChange={handleChange}
                             />
-                            <label for="female">Female</label>
+                            <label className="ps-1" for="female">
+                              Female
+                            </label>
                           </div>
                           <div class="containGender">
                             <input
@@ -244,14 +288,17 @@ const Addpatient = ({ images, collaspeEvent }) => {
                               type="radio"
                               name="gender"
                               value="other"
-                              checked={gender === "other"}
-                              onChange={(e) => {
-                                setGender(e.target.value);
-                              }}
+                              checked={newpatient.gender === "other"}
+                              onChange={handleChange}
                             />
-                            <label for="other">Other</label>
+                            <label className="ps-1" for="other">
+                              Other
+                            </label>
                           </div>
                         </span>
+                        {erros.gender && (
+                          <p className="required-validation">{erros.gender}</p>
+                        )}
                       </div>
 
                       <div class="col-md-8">
@@ -262,11 +309,10 @@ const Addpatient = ({ images, collaspeEvent }) => {
                           type="text"
                           class="custom-input-field"
                           id="description"
+                          name="description"
                           placeholder="Enter Description"
-                          value={description}
-                          onChange={(e) => {
-                            setDescription(e.target.value);
-                          }}
+                          value={newpatient.description}
+                          onChange={handleChange}
                           rows="6"
                         ></textarea>
                       </div>

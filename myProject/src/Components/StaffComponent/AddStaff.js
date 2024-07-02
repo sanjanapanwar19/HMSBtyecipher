@@ -5,17 +5,21 @@ import { useState } from "react";
 import axios from "axios";
 
 const AddStaff = ({ images, collaspeEvent }) => {
+  const [newStaff, setNewStaff] =useState (
+    {
+      role: "",
+      fullName: "",
+      email: "",
+      dob: "",
+      contactNumber: "",
+      specialization: "",
+      gender: "",
+    },
+  )
+  const [erros, setErros] = useState({});
   const { collasped, setCollasped } = collaspeEvent;
   const navigate = useNavigate();
   const [photo, setPhoto] = useState();
-  const [role, setRole] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [dob, setDob] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
-  const [specialization, setSpecialization] = useState("");
-  const [gender, setGender] = useState("male");
-  const [description, setDescription] = useState("");
 
   const handlePhoto = (e) => {
     e.preventDefault();
@@ -23,28 +27,54 @@ const AddStaff = ({ images, collaspeEvent }) => {
     setPhoto(e.target.files[0]);
     console.log("photo", photo);
   };
+
+  const handleChange = (e) => {
+    setNewStaff((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value,
+    }));
+  };
+  const validateValues = (staffItem) => {
+    let errors = {};
+
+    if (!staffItem.role) {
+      errors.role = "this field is necessary";
+    }
+    if (!staffItem.fullName) {
+      errors.fullName = "this field is necessary";
+    }
+    if (!staffItem.email) {
+      errors.email = "this field is necessary";
+    }
+    if (!staffItem.dob) {
+      errors.dob = "this field is necessary";
+    }
+
+    if (!staffItem.contactNumber) {
+      errors.contactNumber = "this field is necessary";
+    }
+    if (!staffItem.specialization) {
+      errors.specialization = "this field is necessary";
+    }
+    if (!staffItem.gender) {
+      errors.gender = "please select your gender";
+    }
+
+    console.log("erros in the valid inputs", errors);
+    return errors;
+  };
   const handleStaffSubmit = async (e) => {
-    
     e.preventDefault();
-    console.log("handleStaffSubmit fun has been called");
-    console.log("role is", role);
-    console.log("full name is", fullName);
-    console.log("email is", email);
-    console.log("dob is", dob);
-    console.log("contact number is", contactNumber);
-    console.log("specialization is", specialization);
-    console.log("gender is", gender);
-    console.log("description is", description);
-    const newStaff = {
-      role,
-      fullName,
-      email,
-      dob,
-      contactNumber,
-      specialization,
-      gender,
-      description,
-    };
+    const err = validateValues(newStaff);
+    console.log("err", err);
+    setErros(err);
+    const length = Object.keys(err).length;
+    if (length === 0) {
+      finishSubmiting();
+    }
+  };
+
+  const finishSubmiting = async () => {
     console.log("newStaff is", newStaff);
     try {
       const res = await axios.post("/staff/addStaff", newStaff);
@@ -56,7 +86,6 @@ const AddStaff = ({ images, collaspeEvent }) => {
       console.log("error is", err);
     }
   };
-
   return (
     <div class="wapper">
       <Sidebar images={images} collaspeEvent={{ collasped, setCollasped }} />
@@ -120,15 +149,17 @@ const AddStaff = ({ images, collaspeEvent }) => {
                         </label>
                         <select
                           class="custom-input-field"
-                          value={role}
-                          onChange={(e) => {
-                            setRole(e.target.value);
-                          }}
+                          name="role"
+                          value={newStaff.role}
+                          onChange={handleChange}
                         >
                           <option>Select Role Type</option>
                           <option value="Doctor">Doctor</option>
                           <option value="Nurse">Nurse</option>
                         </select>
+                        {erros.role && (
+                          <p className="required-validation">{erros.role}</p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="fullname" class="custom-form-label">
@@ -138,12 +169,16 @@ const AddStaff = ({ images, collaspeEvent }) => {
                           type="text"
                           class="custom-input-field"
                           id="fullname"
+                          name="fullName"
                           placeholder="Enter Full Name"
-                          value={fullName}
-                          onChange={(e) => {
-                            setFullName(e.target.value);
-                          }}
+                          value={newStaff.fullName}
+                          onChange={handleChange}
                         />
+                        {erros.fullName && (
+                          <p className="required-validation">
+                            {erros.fullName}
+                          </p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="email" class="custom-form-label">
@@ -154,11 +189,13 @@ const AddStaff = ({ images, collaspeEvent }) => {
                           class="custom-input-field"
                           id="email"
                           placeholder="Enter Email"
-                          value={email}
-                          onChange={(e) => {
-                            setEmail(e.target.value);
-                          }}
+                          name="email"
+                          value={newStaff.email}
+                          onChange={handleChange}
                         />
+                        {erros.email && (
+                          <p className="required-validation">{erros.email}</p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="dateofbirth" class="custom-form-label">
@@ -169,11 +206,13 @@ const AddStaff = ({ images, collaspeEvent }) => {
                           type="date"
                           class="custom-input-field"
                           id="dateofbirth"
-                          value={dob}
-                          onChange={(e) => {
-                            setDob(e.target.value);
-                          }}
+                          name="dob"
+                          value={newStaff.dob}
+                          onChange={handleChange}
                         />
+                        {erros.dob && (
+                          <p className="required-validation">{erros.dob}</p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="contact-number" class="custom-form-label">
@@ -184,12 +223,16 @@ const AddStaff = ({ images, collaspeEvent }) => {
                           type="text"
                           class="custom-input-field"
                           id="contact-number"
+                          name="contactNumber"
                           placeholder="Enter Contect Nubmer"
-                          value={contactNumber}
-                          onChange={(e) => {
-                            setContactNumber(e.target.value);
-                          }}
+                          value={newStaff.contactNumber}
+                          onChange={handleChange}
                         />
+                        {erros.contactNumber && (
+                          <p className="required-validation">
+                            {erros.contactNumber}
+                          </p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="specialization" class="custom-form-label">
@@ -201,11 +244,15 @@ const AddStaff = ({ images, collaspeEvent }) => {
                           class="custom-input-field"
                           id="specialization"
                           placeholder="Enetr Specialization"
-                          value={specialization}
-                          onChange={(e) => {
-                            setSpecialization(e.target.value);
-                          }}
+                          name="specialization"
+                          value={newStaff.specialization}
+                          onChange={handleChange}
                         />
+                        {erros.specialization && (
+                          <p className="required-validation">
+                            {erros.specialization}
+                          </p>
+                        )}
                       </div>
                       <div class="col-md-12">
                         <label for="gender" class="custom-form-label">
@@ -218,10 +265,8 @@ const AddStaff = ({ images, collaspeEvent }) => {
                               type="radio"
                               name="gender"
                               value="male"
-                              checked={gender === "male"}
-                              onChange={(e) => {
-                                setGender(e.target.value);
-                              }}
+                              checked={newStaff.gender === "male"}
+                              onChange={handleChange}
                             />
                             <label for="male">Male</label>
                           </div>
@@ -231,10 +276,8 @@ const AddStaff = ({ images, collaspeEvent }) => {
                               type="radio"
                               name="gender"
                               value="female"
-                              checked={gender === "female"}
-                              onChange={(e) => {
-                                setGender(e.target.value);
-                              }}
+                              checked={newStaff.gender === "female"}
+                              onChange={handleChange}
                             />
                             <label for="female">Female</label>
                           </div>
@@ -244,14 +287,15 @@ const AddStaff = ({ images, collaspeEvent }) => {
                               type="radio"
                               name="gender"
                               value="other"
-                              checked={gender === "other"}
-                              onChange={(e) => {
-                                setGender(e.target.value);
-                              }}
+                              checked={newStaff.gender === "other"}
+                              onChange={handleChange}
                             />
                             <label for="other">Other</label>
                           </div>
                         </span>
+                        {erros.gender && (
+                          <p className="required-validation">{erros.gender}</p>
+                        )}
                       </div>
 
                       <div class="col-md-8">
@@ -264,10 +308,9 @@ const AddStaff = ({ images, collaspeEvent }) => {
                           id="description"
                           placeholder="Enter Description"
                           rows="6"
-                          value={description}
-                          onChange={(e) => {
-                            setDescription(e.target.value);
-                          }}
+                          name="description"
+                          value={newStaff.description}
+                          onChange={handleChange}
                         ></textarea>
                       </div>
                       <div class="col-md-12 mt-4">

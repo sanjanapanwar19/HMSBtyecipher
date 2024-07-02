@@ -22,8 +22,7 @@ export const addPatient = async (req, res) => {
       !contactNumber ||
       !disease ||
       !bloodgroup ||
-      !gender ||
-      !description
+      !gender
     ) {
       return res.status(400).json({ msg: "please enter all the fields" });
     }

@@ -22,8 +22,7 @@ export const addStaff = async (req, res) => {
       !dob ||
       !contactNumber ||
       !specialization ||
-      !gender ||
-      !description
+      !gender
     ) {
       return res.status(400).json({ msg: "please enter all the fields" });
     }

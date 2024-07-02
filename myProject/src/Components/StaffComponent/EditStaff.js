@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const EditStaff = ({ images, collaspeEvent }) => {
+  const [erros, setErros] = useState({});
   const { collasped, setCollasped } = collaspeEvent;
   const location = useLocation();
   const navigate = useNavigate();
@@ -24,6 +25,8 @@ const EditStaff = ({ images, collaspeEvent }) => {
       [name]: value,
     }));
   };
+
+ 
   const handleSubmit = (e) => {
     e.preventDefault();
 
