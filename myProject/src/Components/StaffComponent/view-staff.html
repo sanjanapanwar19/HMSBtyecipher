@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="assets/images/small_logo.png">
+    <title>New Project - View Staff</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="wapper">
+        <div class="sidebar">
+            <header>
+                <img src="assets/images/dummy_logo.png" class="logo" />
+            </header>
+            <div class="menu">
+                <div class="item">
+                    <a href="dashboard.html">
+                    <img src="assets/icons/Dashboard.png" />
+                    <span>Dashboard</span>
+                    </a>
+                </div>
+                <div class="item">
+                    <a href="appointment.html">
+                    <img src="assets/icons/appointment.png" />
+                    <span>My Appointments</span></a>
+                </div>
+                <div class="item">
+                    <a href="patient.html">
+                    <img src="assets/icons/patient.png" />
+                    <span>Patients</span></a>
+                </div>
+                <div class="item active">
+                    <a href="staff.html">
+                    <img src="assets/icons/staff.png" />
+                    <span>Staff</span></a>
+                </div>                 
+            </div>
+        </div>
+        <div class="main-container">
+            <nav class="header-nav">
+                <div class="navbar navbar-expand-lg">
+                    <div class="container-fluid">
+                        <div class="row w-100">
+                            <div class="col-xxl-12 d-flex justify-content-between ">
+                                <button class="collapse-btn">
+                                    <img src="./assets/icons/collaps-btn.png" />
+                                </button>
+                                <div class="avatar">
+                                    <div class="dropdown">
+                                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                         <img src="/assets/icons/avatar.png"></img>
+                                         <h6>Amit Shah<span>Admin</span></h6>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                            <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                                            <li><a class="dropdown-item" href="change-password.html">Change Password</a></li>
+                                          <li><a class="dropdown-item" href="login.html">Log Out</a></li>
+                                        </ul>
+                                     </div>
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div class="content">
+                <div class="row mb-3">
+                    <div class="col-xxl-12">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-xxl-12">
+                                    <div class="greetingsText mb-3">
+                                        <div class="greetingsText-heading">
+                                            <nav aria-label="breadcrumb">
+                                                <ol class="breadcrumb">
+                                                    <li class="breadcrumb-item"><a href="staff.html">Staff</a>
+                                                    </li>
+                                                    <li class="breadcrumb-item active" aria-current="page">View Staff</li>
+                                                </ol>
+                                            </nav>
+                                            <h3>Staff</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-xxl-2">
+                                    <div class="addProjectlogo">
+                                        <div class="upload-img-box">
+                                            <div class="circle">
+                                                <img src="assets/images/dummy_logo.png" alt="" />
+                                            </div>
+                                        </div>
+                                        <h6>Profile Image</h6>
+                                    </div>
+                                </div>
+                                <div class="col-xxl-10">
+                                    <form class="row g-3">
+                                        <div class="col-md-4">
+                                            <label for="role" class="custom-form-label">Select Role <span class="required-validation">*</span></label>
+                                            <select class="custom-input-field" disabled>
+                                                <option>Select Role Type</option>
+                                                <option value="Doctor" selected>Doctor</option>
+                                                <option value="Nurse">Nurse</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="fullname" class="custom-form-label">Full Name <span class="required-validation">*</span></label>
+                                            <input type="test" class="custom-input-field" id="fullname"
+                                                value="Vijay Sharma" disabled>
+                                        </div>                                        
+                                        <div class="col-md-4">
+                                            <label for="email" class="custom-form-label">Email</label>
+                                            <input type="email" class="custom-input-field" id="email"
+                                            value="vijaysharma@gmail.com" disabled>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="dateofbirth" class="custom-form-label">Date of Birth <span class="required-validation">*</span></label>
+                                            <input type="date" class="custom-input-field" id="dateofbirth" disabled>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="contact-number" class="custom-form-label">Contact Number <span class="required-validation">*</span></label>
+                                            <input type="text" class="custom-input-field" id="contact-number"
+                                            value="9876543210" disabled>
+                                        </div>                                       
+                                        <div class="col-md-4">
+                                            <label for="specialization " class="custom-form-label">Specialization  <span class="required-validation">*</span></label>
+                                            <input type="text" class="custom-input-field" id="specialization" value="Orthopedics" disabled> 
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="gender" class="custom-form-label">Gender <span class="required-validation">*</span></label> 
+                                            <span class="d-flex">
+                                                <div class="containGender">
+                                                    <input id="male" type="radio" name="gender" value="male" checked >
+                                                    <label for="male">Male</label>
+                                                </div>
+                                            <div class="containGender">
+                                                <input id="female" type="radio" name="gender" value="female" disabled>
+                                                <label for="female">Female</label>
+                                            </div>                                        
+                                            <div class="containGender">
+                                                <input id="other" type="radio" name="gender" value="other" disabled>
+                                                <label for="other">Other</label>
+                                            </div> 
+                                            </span>
+                                            
+                                        </div>                                 
+                                        
+                                        <div class="col-md-8">
+                                            <label for="description" class="custom-form-label">Description</label>
+                                            <textarea type="text" class="custom-input-field" id="description"
+                                            value="" 
+                                            rows="6" disabled>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</textarea>    
+                                        </div>
+                                       
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/custom.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+
+</html>

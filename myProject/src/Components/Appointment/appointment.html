@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="assets/images/small_logo.png">
+    <title>Project - Appointment</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="wapper">
+        <div class="sidebar">
+            <header>
+                <img src="assets/images/dummy_logo.png" class="logo" />
+            </header>
+            <div class="menu">
+                <div class="item">
+                    <a href="dashboard.html">
+                    <img src="assets/icons/Dashboard.png" />
+                    <span>Dashboard</span>
+                    </a>
+                </div>
+                <div class="item active">
+                    <a href="appointment.html">
+                    <img src="assets/icons/appointment.png" />
+                    <span>My Appointments</span></a>
+                </div>
+                <div class="item">
+                    <a href="patient.html">
+                    <img src="assets/icons/patient.png" />
+                    <span>Patients</span></a>
+                </div>
+                <div class="item">
+                    <a href="staff.html">
+                    <img src="assets/icons/staff.png" />
+                    <span>Staff</span></a>
+                </div>                 
+            </div>
+        </div>
+        <div class="main-container">
+            <nav class="header-nav">
+                <div class="navbar navbar-expand-lg">
+                    <div class="container-fluid">
+                        <div class="row w-100">
+                            <div class="col-xxl-12 d-flex justify-content-between ">
+                                <button class="collapse-btn">
+                                    <img src="./assets/icons/collaps-btn.png" />
+                                </button>
+                                <div class="avatar">
+                                    <div class="dropdown">
+                                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                         <img src="/assets/icons/avatar.png"></img>
+                                         <h6>Amit Shah<span>Admin</span></h6>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                          <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                                          <li><a class="dropdown-item" href="change-password.html">Change Password</a></li>
+                                          <li><a class="dropdown-item" href="login.html">Log Out</a></li>
+                                        </ul>
+                                     </div>
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div class="content">
+                <div class="row mb-3">
+                    <div class="col-xxl-12">
+                        <div class="row justify-content-between align-items-center mb-3">
+                            <div class="col-xxl-3">
+                                <div class="greetingsText">
+                                    <div class="greetingsText-heading">
+                                        <h3>My Appointments</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 d-flex">
+                                <div class="buttons d-flex">
+                                    <a href="add-appointment.html" class="ctr-btn"><img src="/assets/icons/add.png" alt=""></a>
+                                </div>
+                                <input type="text" class="custom-input-field" placeholder="Search Appointments">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xxl-12">
+                                <div class="table-responsive">
+                                    <table class="custom-table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Patient Id</th>
+                                                <th scope="col">Patient Name</th>
+                                                <th scope="col">Doctor Id</th>
+                                                <th scope="col">Doctor Name</th>
+                                                <th scope="col">Time</th>
+                                                <th scope="col">Date of Birth</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>A01</td>
+                                                <td>
+                                                    <img src="/assets/images/Ellipse 7.png">
+                                                    <span>Pooja Patel
+                                                    </span>
+                                                </td>
+                                                <td>D01</td>
+                                                <td class="d-flex">
+                                                    <img src="/assets/images/picture.png">
+                                                    <span>Vijay Sharma
+                                                        <small style="display: block;">Doctor</small>
+                                                    </span>
+                                                </td>
+                                                <td>01:30 PM</td>
+                                                <td>20/10/1992</td>
+                                                <td>
+                                                    <div class="action-btn">
+                                                        <a href="edit-appointment.html">
+                                                            <img src="/assets/icons/Edit.png">
+                                                        </a>
+                                                        <a href="" data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModal">
+                                                            <img src="/assets/icons/Delete.png">
+                                                        </a>
+                                                        <a href="view-appointment.html">
+                                                            <img src="/assets/icons/view.png">
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>A02</td>
+                                                <td class="d-flex">
+                                                    <img src="/assets/images/picture.png">
+                                                    <span>Vijay Sharma
+                                                    </span>
+                                                </td>
+                                                <td>D02</td>
+                                                <td class="d-flex">
+                                                    <img src="/assets/images/Ellipse 7.png">
+                                                    <span>Pooja Patel
+                                                        <small style="display: block;">Doctor</small>
+                                                    </span>
+                                                </td>
+                                                <td>03:30 PM</td>
+                                                <td>20/10/1997</td>
+                                                <td class="d-flex">
+                                                    <div class="action-btn">
+                                                        <a href="edit-appointment.html">
+                                                            <img src="/assets/icons/Edit.png">
+                                                        </a>
+                                                        <a href="" data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModal">
+                                                            <img src="/assets/icons/Delete.png">
+                                                        </a>
+                                                        <a href="view-appointment.html">
+                                                            <img src="/assets/icons/view.png">
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>A03</td>
+                                                <td>
+                                                    <img src="/assets/images/Ellipse 7.png">
+                                                    <span>Pooja Patel
+                                                    </span>
+                                                </td>
+                                                <td>D03</td>
+                                                <td class="d-flex">
+                                                    <img src="/assets/images/picture.png">
+                                                    <span>Vijay Sharma
+                                                        <small style="display: block;">Doctor</small>
+                                                    </span>
+                                                </td>
+                                                <td>01:30 PM</td>
+                                                <td>20/10/1992</td>
+                                                <td>
+                                                    <div class="action-btn">
+                                                        <a href="edit-appointment.html">
+                                                            <img src="/assets/icons/Edit.png">
+                                                        </a>
+                                                        <a href="" data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModal">
+                                                            <img src="/assets/icons/Delete.png">
+                                                        </a>
+                                                        <a href="view-appointment.html">
+                                                            <img src="/assets/icons/view.png">
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>A04</td>
+                                                <td class="d-flex">
+                                                    <img src="/assets/images/picture.png">
+                                                    <span>Vijay Sharma
+                                                    </span>
+                                                </td>
+                                                <td>D04</td>
+                                                <td class="d-flex">
+                                                    <img src="/assets/images/Ellipse 7.png">
+                                                    <span>Pooja Patel
+                                                        <small style="display: block;">Doctor</small>
+                                                    </span>
+                                                </td>
+                                                <td>03:30 PM</td>
+                                                <td>20/10/1997</td>
+                                                <td class="d-flex">
+                                                    <div class="action-btn">
+                                                        <a href="edit-appointment.html">
+                                                            <img src="/assets/icons/Edit.png">
+                                                        </a>
+                                                        <a href="" data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModal">
+                                                            <img src="/assets/icons/Delete.png">
+                                                        </a>
+                                                        <a href="view-appointment.html">
+                                                            <img src="/assets/icons/view.png">
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade customDesign" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">&nbsp;</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img src="assets/images/deleteModal_icon.png" alt="" class="mainIconModal">
+                        <h2>Delete Appointment</h2>
+                        <p>Are you sure you want to Delete Vijay Sharma?</p>
+                        <div class="footbutton">
+                            <button type="button" class="custom-btn cancelBtn" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="custom-btn custom-btnCus">Confirm</button>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/custom.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
+
+
+
+</body>
+
+</html>
