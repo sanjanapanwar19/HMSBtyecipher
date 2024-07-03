@@ -2,6 +2,8 @@ import React, { useContext, useState } from "react";
 
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignUp = ({ images }) => {
   const navigate = useNavigate();
@@ -13,29 +15,21 @@ const SignUp = ({ images }) => {
     password: "",
     confirmPassword: "",
   });
-  const [type1, setType1] = useState("password");
-  const [icon1, setIcon1] = useState(images.offEye);
-  const [type2, setType2] = useState("password");
-  const [icon2, setIcon2] = useState(images.offEye);
-  console.log("icon is", icon1);
-
-  const passwordToggle = () => {
-    if (type1 === "password") {
-      setIcon1(images.eye);
-      setType1("text");
-    } else {
-      setIcon1(images.offEye);
-      setType1("password");
-    }
-  };
-  const confirmpasswordToggle = () => {
-    if (type2 === "password") {
-      setIcon2(images.eye);
-      setType2("text");
-    } else {
-      setIcon2(images.offEye);
-      setType2("password");
-    }
+  const [passwordToggle, setPasswordToggle] = useState({
+    password: false,
+    confirmPassword:false
+  });
+  const handlePasswordToggle = (e, key, value) => {
+    e.preventDefault();
+    console.log(
+      "e in the handle password toggle fun of change passwrod component is",
+      e
+    );
+    console.log("and same fun key is", key);
+    setPasswordToggle((prevData) => ({
+      ...prevData,
+      [key]: value,
+    }));
   };
   const validateValues = (item) => {
     let errors = {};
@@ -90,13 +84,18 @@ const SignUp = ({ images }) => {
       const res = await axios.post("/auth/register", signUpCredentials);
       console.log("resss", res);
       if (res.data.status) {
-        navigate("/login");
+         toast.success("register sucessfullu sucsess");
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
       }
     } catch (err) {
       console.log("error is", err.response.data.msg);
     }
   };
   return (
+    <>
+      <ToastContainer />
     <div className="login">
       <div className="container-fluid">
         <div className="row">
@@ -170,13 +169,19 @@ const SignUp = ({ images }) => {
                     </label>
                     <div className="possionIconInput">
                       <img
-                        onClick={passwordToggle}
-                        src={icon1}
+                        onClick={(e) => {
+                              handlePasswordToggle(
+                                e,
+                                "password",
+                                !passwordToggle.password
+                              );
+                            }}
+                        src={passwordToggle.password ? images.eye:images.offEye}
                         alt=""
                         class="eyeIconView"
                       />
                       <input
-                        type={type1}
+                        type={passwordToggle.password?"text":"password"}
                         className="custom-input-field"
                         id="lastname"
                         placeholder="Enter Password"
@@ -197,13 +202,19 @@ const SignUp = ({ images }) => {
                     </label>
                     <div className="possionIconInput">
                       <img
-                        onClick={confirmpasswordToggle}
-                        src={icon2}
+                        onClick={(e) => {
+                              handlePasswordToggle(
+                                e,
+                                "confirmPassword",
+                                !passwordToggle.confirmPassword
+                              );
+                            }}
+                        src={passwordToggle.confirmPassword? images.eye:images.offEye}
                         alt=""
                         class="eyeIconView"
                       />
                       <input
-                        type={type2}
+                        type={passwordToggle.confirmPassword ? "text":"password"}
                         className="custom-input-field"
                         id="lastname"
                         name="confirmPassword"
@@ -238,7 +249,8 @@ const SignUp = ({ images }) => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+      </>
   );
 };
 

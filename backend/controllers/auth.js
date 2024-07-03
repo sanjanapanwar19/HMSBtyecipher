@@ -1,7 +1,6 @@
 import User from "../models/UserModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { isValidObjectId } from "mongoose";
 import nodemailer from "nodemailer";
 
 export const register = async (req, res) => {

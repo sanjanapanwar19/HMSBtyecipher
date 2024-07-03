@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Sidebar from "../../SideBar/Sidebar";
 import Header from "../../Header/Header";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
 const EditStaff = ({ images, collaspeEvent }) => {
@@ -25,16 +27,51 @@ const EditStaff = ({ images, collaspeEvent }) => {
       [name]: value,
     }));
   };
+  const validateValues = (staffItem) => {
+    let errors = {};
 
- 
+    if (staffItem.role !== "Doctor" || staffItem.role !== "Nurse") {
+      errors.role = "Please select role";
+    }
+    if (!staffItem.fullName) {
+      errors.fullName = "this field is necessary";
+    }
+    if (!staffItem.email) {
+      errors.email = "this field is necessary";
+    }
+    if (!staffItem.dob) {
+      errors.dob = "this field is necessary";
+    }
+
+    if (!staffItem.contactNumber) {
+      errors.contactNumber = "this field is necessary";
+    }
+    if (!staffItem.specialization) {
+      errors.specialization = "this field is necessary";
+    }
+    if (!staffItem.gender) {
+      errors.gender = "please select your gender";
+    }
+
+    console.log("erros in the valid inputs", errors);
+    return errors;
+  };
+
   const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const id = staffDetails._id;
-    console.log("id is", id);
     e.preventDefault();
     console.log("handle submit fun of edit staff");
     console.log("data is", staffDetails);
+    const err = validateValues(staffDetails);
+    console.log("err", err);
+    setErros(err);
+    const length = Object.keys(err).length;
+    if (length === 0) {
+      finishSubmiting();
+    }
+  };
+  const finishSubmiting = async () => {
+    const id = staffDetails._id;
+    console.log("id is", id);
     const fun = async (req, res) => {
       try {
         const res = await axios.put(
@@ -42,19 +79,23 @@ const EditStaff = ({ images, collaspeEvent }) => {
           staffDetails
         );
         console.log("response is", res.data);
-        navigate("/staff");
+        toast.success("staff is edited sucessfully");
+        setTimeout(() => {
+          navigate("/staff");
+        }, 2000);
       } catch (err) {
         console.log("err is", err);
       }
     };
     fun();
   };
-
   return (
+    <>
+    <ToastContainer />
     <div className="wrapper">
-      <Sidebar images={images} collaspeEvent={{ collasped, setCollasped }}/>
+      <Sidebar images={images} collaspeEvent={{ collasped, setCollasped }} />
       <div className={`main-container ${collasped && "main-content_large"}`}>
-        <Header images={images} collaspeEvent={{ collasped, setCollasped }}/>
+        <Header images={images} collaspeEvent={{ collasped, setCollasped }} />
         <div class="content">
           <div class="row mb-3">
             <div class="col-xxl-12">
@@ -122,6 +163,9 @@ const EditStaff = ({ images, collaspeEvent }) => {
                           </option>
                           <option value="Nurse">Nurse</option>
                         </select>
+                        {erros.role && (
+                          <p className="required-validation">{erros.role}</p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="fullname" class="custom-form-label">
@@ -135,6 +179,11 @@ const EditStaff = ({ images, collaspeEvent }) => {
                           value={staffDetails.fullName}
                           onChange={handleChange}
                         />
+                        {erros.fullName && (
+                          <p className="required-validation">
+                            {erros.fullName}
+                          </p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="email" class="custom-form-label">
@@ -148,6 +197,9 @@ const EditStaff = ({ images, collaspeEvent }) => {
                           value={staffDetails.email}
                           onChange={handleChange}
                         />
+                        {erros.email && (
+                          <p className="required-validation">{erros.email}</p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label class="custom-form-label">
@@ -161,6 +213,9 @@ const EditStaff = ({ images, collaspeEvent }) => {
                           value={staffDetails.dob}
                           onChange={handleChange}
                         />
+                        {erros.dob && (
+                          <p className="required-validation">{erros.dob}</p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="contact-number" class="custom-form-label">
@@ -175,6 +230,11 @@ const EditStaff = ({ images, collaspeEvent }) => {
                           value={staffDetails.contactNumber}
                           onChange={handleChange}
                         />
+                        {erros.contactNumber && (
+                          <p className="required-validation">
+                            {erros.contactNumber}
+                          </p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="specialization " class="custom-form-label">
@@ -189,6 +249,11 @@ const EditStaff = ({ images, collaspeEvent }) => {
                           value={staffDetails.specialization}
                           onChange={handleChange}
                         />
+                        {erros.specialization && (
+                          <p className="required-validation">
+                            {erros.specialization}
+                          </p>
+                        )}
                       </div>
                       <div class="col-md-12">
                         <label for="gender" class="custom-form-label">
@@ -229,6 +294,9 @@ const EditStaff = ({ images, collaspeEvent }) => {
                             <label for="other">Other</label>
                           </div>
                         </span>
+                        {erros.gender && (
+                          <p className="required-validation">{erros.gender}</p>
+                        )}
                       </div>
 
                       <div class="col-md-8">
@@ -243,13 +311,7 @@ const EditStaff = ({ images, collaspeEvent }) => {
                           value={staffDetails.description}
                           onChange={handleChange}
                           rows="6"
-                        >
-                          Lorem Ipsum is simply dummy text of the printing and
-                          typesetting industry. Lorem Ipsum has been the
-                          industry's standard dummy text ever since the 1500s,
-                          when an unknown printer took a galley of type and
-                          scrambled it to make a type specimen book
-                        </textarea>
+                        ></textarea>
                       </div>
                       <div class="col-md-12 mt-4">
                         <button
@@ -268,6 +330,7 @@ const EditStaff = ({ images, collaspeEvent }) => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

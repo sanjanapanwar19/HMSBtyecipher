@@ -30,7 +30,7 @@ const Sidebar = ({ images, collaspeEvent }) => {
           }`}
         >
           <Link to={"/appointment"}>
-            <img src={images.appointment} alt="" />
+            <img src={images.appointmentImg} alt="" />
             <span>My Appointments</span>
           </Link>
         </div>

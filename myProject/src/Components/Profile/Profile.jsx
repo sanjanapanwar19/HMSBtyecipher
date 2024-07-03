@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Profile = ({ images, collaspeEvent }) => {
+  const [erros, setErros] = useState({});
   const navigate = useNavigate();
   const { collasped, setCollasped } = collaspeEvent;
   const [loggedAdmin, setLoggedAdmin] = useState(
@@ -21,9 +22,35 @@ const Profile = ({ images, collaspeEvent }) => {
       [name]: value,
     }));
   };
+
+  
+  const validateValues = (admin) => {
+    let errors = {};
+
+    if (!admin.name) {
+      errors.name = "this field is necessary";
+    }
+    if (!admin.email) {
+      errors.email = "please enter email";
+    }
+    if (!admin.phoneNumber) {
+      errors.phoneNumber = "please enter phone number";
+    }
+    console.log("erros in the valid inputs", errors);
+    return errors;
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("hanlde submit fun of profile component");
+    const err = validateValues(loggedAdmin);
+    console.log("err", err);
+    setErros(err);
+    const length = Object.keys(err).length;
+    if (length === 0) {
+      finishSubmiting();
+    }
+  };
+  const finishSubmiting = async () => {
     const id = loggedAdmin._id;
     const fun = async (req, res) => {
       try {
@@ -115,6 +142,11 @@ const Profile = ({ images, collaspeEvent }) => {
                           value={loggedAdmin.name}
                           onChange={handleChange}
                         />
+                        {erros.name && (
+                          <p className="required-validation">
+                            {erros.name}
+                          </p>
+                        )}
                       </div>
                       <div class="col-md-12">
                         <label for="email" class="custom-form-label">
@@ -128,6 +160,11 @@ const Profile = ({ images, collaspeEvent }) => {
                           value={loggedAdmin.email}
                           onChange={handleChange}
                         />
+                          {erros.email && (
+                          <p className="required-validation">
+                            {erros.email}
+                          </p>
+                        )}
                       </div>
                       <div class="col-md-12">
                         <label for="contact-number" class="custom-form-label">
@@ -142,6 +179,11 @@ const Profile = ({ images, collaspeEvent }) => {
                           value={loggedAdmin.phoneNumber}
                           onChange={handleChange}
                         />
+                          {erros.phoneNumber && (
+                          <p className="required-validation">
+                            {erros.phoneNumber}
+                          </p>
+                        )}
                       </div>
                       <div class="col-md-12">
                         <label for="address" class="custom-form-label">
@@ -153,8 +195,6 @@ const Profile = ({ images, collaspeEvent }) => {
                           id="address"
                           rows="4"
                         >
-                          Lorem Ipsum is simply dummy text of the printing and
-                          typesetting industry.
                         </textarea>
                       </div>
                       <div class="col-md-12 mt-4">

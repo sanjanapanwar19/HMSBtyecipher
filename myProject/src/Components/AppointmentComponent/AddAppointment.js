@@ -5,90 +5,85 @@ import patient from "../assets/icons/patient.svg";
 import staff from "../assets/icons/staff.svg";
 import collaspebtn from "../assets/icons/collaps-btn.svg";
 import avtar from "../assets/icons/avatar.png";
-const AddAppointment = () => {
+import Sidebar from "../../SideBar/Sidebar";
+import Header from "../../Header/Header";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+const AddAppointment = ({ images, collaspeEvent }) => {
+  const [newAppointment, setNewAppointment] = useState({
+    patientName: "",
+    doctorName: "",
+    patientEmail: "",
+    time: "",
+    description: "",
+    dob: "",
+  });
+  const [erros, setErros] = useState({});
+  const { collasped, setCollasped } = collaspeEvent;
+  const navigate = useNavigate();
+  const handleChange = (e) => {
+    setNewAppointment((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value,
+    }));
+  };
+  const validateValues = (appointmentItem) => {
+    let errors = {};
+
+    if (!appointmentItem.patientName) {
+      errors.patientName = "this field is necessary";
+    }
+    if (!appointmentItem.doctorName) {
+      errors.doctorName = "this field is necessary";
+    }
+    if (!appointmentItem.time) {
+      errors.time = "this field is necessary";
+    }
+    if (!appointmentItem.description) {
+      errors.description = "please select your gender";
+    }
+    console.log("erros in the valid inputs", errors);
+    return errors;
+  };
+  const handleAppointmentSubmit = async (e) => {
+    e.preventDefault();
+    console.log("handle appointment fun has been called");
+    const err = validateValues(newAppointment);
+    console.log("err", err);
+    setErros(err);
+    const length = Object.keys(err).length;
+    if (length === 0) {
+      finishSubmiting();
+    }
+  };
+  const finishSubmiting = async () => {
+    console.log("finish submiting of add appointment fun has been called");
+    console.log("new appointment is", newAppointment);
+    try {
+      const res = await axios.post(
+        "/appointment/addAppointment",
+        newAppointment
+      );
+      console.log("res", res);
+      if (res.data.status) {
+        toast.success("appointment  is booked sucessfully");
+        setTimeout(() => {
+          navigate("/appointment");
+        }, 2000);
+      }
+    } catch (err) {
+      console.log("error is", err);
+    }
+  };
+
   return (
     <div class="wapper">
-      <div class="sidebar">
-        <header>
-          <img src={dummyLogo} alt="" class="logo" />
-        </header>
-        <div class="menu">
-          <div class="item">
-            <a href="dashboard.html">
-              <img src={Dashboard} alt="" />
-              <span>Dashboard</span>
-            </a>
-          </div>
-          <div class="item active">
-            <a href="appointment.html">
-              <img src={appointment} alt="" />
-              <span>My Appointments</span>
-            </a>
-          </div>
-          <div class="item">
-            <a href="patient.html">
-              <img src={patient} alt="" />
-              <span>Patients</span>
-            </a>
-          </div>
-          <div class="item">
-            <a href="staff.html">
-              <img src={staff} alt="" />
-              <span>Staff</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="main-container">
-        <nav class="header-nav">
-          <div class="navbar navbar-expand-lg">
-            <div class="container-fluid">
-              <div class="row w-100">
-                <div class="col-xxl-12 d-flex justify-content-between ">
-                  <button class="collapse-btn">
-                    <img src={collaspebtn} alt="" />
-                  </button>
-                  <div class="avatar">
-                    <div class="dropdown">
-                      <button
-                        class="dropdown-toggle"
-                        type="button"
-                        id="dropdownMenuButton1"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      >
-                        <img src={avtar} alt=""></img>
-                        <h6>
-                          Amit Shah<span>Admin</span>
-                        </h6>
-                      </button>
-                      <ul
-                        class="dropdown-menu"
-                        aria-labelledby="dropdownMenuButton1"
-                      >
-                        <li>
-                          <a class="dropdown-item" href="profile.html">
-                            Profile
-                          </a>
-                        </li>
-                        <li>
-                          <a class="dropdown-item" href="change-password.html">
-                            Change Password
-                          </a>
-                        </li>
-                        <li>
-                          <a class="dropdown-item" href="login.html">
-                            Log Out
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </nav>
+      <Sidebar images={images} collaspeEvent={{ collasped, setCollasped }} />
+      <div className={`main-container ${collasped && "main-content_large"}`}>
+        <Header images={images} collaspeEvent={{ collasped, setCollasped }} />
         <div class="content">
           <div class="row mb-3">
             <div class="col-xxl-12">
@@ -118,17 +113,6 @@ const AddAppointment = () => {
                     <form class="row g-3">
                       <div class="col-md-4">
                         <label for="fullname" class="custom-form-label">
-                          Patient Id <span class="required-validation">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          class="custom-input-field"
-                          id="fullname"
-                          placeholder="Enter Patient Id"
-                        />
-                      </div>
-                      <div class="col-md-4">
-                        <label for="fullname" class="custom-form-label">
                           Patient Name{" "}
                           <span class="required-validation">*</span>
                         </label>
@@ -136,8 +120,14 @@ const AddAppointment = () => {
                           type="text"
                           class="custom-input-field"
                           id="fullname"
+                          name="patientName"
                           placeholder="Enter Patient Name"
+                          value={newAppointment.patientName}
+                          onChange={handleChange}
                         />
+                         {erros.patientName && (
+                          <p className="required-validation">{erros.patientName}</p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="" class="custom-form-label">
@@ -146,17 +136,7 @@ const AddAppointment = () => {
                         </label>
                         <input type="file" class="custom-input-field" id="" />
                       </div>
-                      <div class="col-md-4">
-                        <label for="doctorName" class="custom-form-label">
-                          Doctor Id <span class="required-validation">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          class="custom-input-field"
-                          id="doctorName"
-                          placeholder="Enter Doctor Id"
-                        />
-                      </div>
+
                       <div class="col-md-4">
                         <label for="doctorid" class="custom-form-label">
                           Doctor Name <span class="required-validation">*</span>
@@ -166,7 +146,13 @@ const AddAppointment = () => {
                           class="custom-input-field"
                           id="doctorid"
                           placeholder="Enter Doctor Name"
+                          name="doctorName"
+                          value={newAppointment.doctorName}
+                          onChange={handleChange}
                         />
+                        {erros.doctorName && (
+                          <p className="required-validation">{erros.doctorName}</p>
+                        )}
                       </div>
                       <div class="col-md-4">
                         <label for="" class="custom-form-label">
@@ -177,13 +163,16 @@ const AddAppointment = () => {
                       </div>
                       <div class="col-md-4">
                         <label for="email" class="custom-form-label">
-                          Email
+                          Patient Email
                         </label>
                         <input
                           type="email"
                           class="custom-input-field"
                           id="email"
                           placeholder="Enter Email"
+                          name="patientEmail"
+                          value={newAppointment.patientEmail}
+                          onChange={handleChange}
                         />
                       </div>
                       <div class="col-md-4">
@@ -194,7 +183,13 @@ const AddAppointment = () => {
                           type="time"
                           class="custom-input-field"
                           id="time"
+                          name="time"
+                          value={newAppointment.time}
+                          onChange={handleChange}
                         />
+                        {erros.time && (
+                          <p className="required-validation">{erros.time}</p>
+                        )}
                       </div>
 
                       <div class="col-md-8">
@@ -207,12 +202,21 @@ const AddAppointment = () => {
                           id="description"
                           placeholder="Enter Description"
                           rows="6"
+                          name="description"
+                          value={newAppointment.description}
+                          onChange={handleChange}
                         ></textarea>
+                        {erros.description && (
+                          <p className="required-validation">{erros.description}</p>
+                        )}
                       </div>
                       <div class="col-md-12 mt-4">
-                        <a href="/dummyLink" class="custom-btn col-md-4">
+                        <button
+                          onClick={handleAppointmentSubmit}
+                          class="custom-btn col-md-4"
+                        >
                           Add Appointment
-                        </a>
+                        </button>
                       </div>
                     </form>
                   </div>

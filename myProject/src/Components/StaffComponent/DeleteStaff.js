@@ -1,5 +1,8 @@
 import React from "react";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const DeleteStaff = ({ data }) => {
   console.log("delete staff component has been rendered");
@@ -19,7 +22,10 @@ const DeleteStaff = ({ data }) => {
       try {
         const res = await axios.delete(`/staff/deleteStaffById/${id}`);
         console.log("res is", res.data);
-        deleteHanlde(false, eachStaff);
+        toast.success("staff is added sucessfully");
+        setTimeout(() => {
+          deleteHanlde(false, eachStaff);
+        }, 1000);
       } catch (err) {
         console.log("err is", err);
       }
@@ -27,6 +33,8 @@ const DeleteStaff = ({ data }) => {
     fun();
   };
   return (
+    <>
+      <ToastContainer/>
     <div
       className={`modal fade customDesign ${flag && "show"}`}
       id="exampleModal"
@@ -81,6 +89,7 @@ const DeleteStaff = ({ data }) => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

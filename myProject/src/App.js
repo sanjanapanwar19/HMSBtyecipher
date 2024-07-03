@@ -4,12 +4,12 @@ import Login from "./Components/Login/Login";
 import DashBoard from "./Components/DashBoard/DashBoard";
 import ForgotPassword from "./Components/ForgotPassword/Forgot_Password";
 import ResetPassword from "./Components/ResetPassword/Reser_Password";
-import Appointment from "./Components/Appointment/Appointment";
+
 import Profile from "./Components/Profile/Profile";
 import Patient from "./Components/Patient/Patient";
 import Staff from "./Components/Staff/Staff";
 import add from "../src/Components/assets/icons/add.svg";
-import appointment from "../src/Components/assets/icons/appointment.svg";
+import appointmentImg from "../src/Components/assets/icons/appointment.svg";
 import avatar from "../src/Components/assets/icons/avatar.png";
 import collapsBtn from "../src/Components/assets/icons/collaps-btn.svg";
 import dashboard from "../src/Components/assets/icons/Dashboard.svg";
@@ -31,13 +31,15 @@ import offEye from "../src/Components/assets/images/off-eye.png";
 import picture from "../src/Components/assets/images/picture.png";
 import sidebarBg from "../src/Components/assets/images/sidebar_bg.png";
 import smallLogo from "../src/Components/assets/images/small_logo.png";
+import ChangePasswordImg from "../src/Components/assets/images/changePassword.png";
 import AddStaff from "./Components/StaffComponent/AddStaff";
-import DeleteStaff from "./Components/StaffComponent/DeleteStaff";
 import EditStaff from "./Components/StaffComponent/EditStaff";
 import ViewStaff from "./Components/StaffComponent/ViewStaff";
 import Addpatient from "./Components/PatientComponent/AddPatient";
 import EditPatient from "./Components/PatientComponent/EditPatient";
 import ViewPatient from "./Components/PatientComponent/ViewPatient";
+import Appointment from "./Components/AppointmentComponent/Appointment";
+import AddAppointment from "./Components/AppointmentComponent/AddAppointment";
 
 import {
   BrowserRouter,
@@ -52,7 +54,7 @@ function App() {
   const [collasped, setCollasped] = useState(false);
   const images = {
     add,
-    appointment,
+    appointmentImg,
     avatar,
     collapsBtn,
     dashboard,
@@ -74,6 +76,7 @@ function App() {
     picture,
     sidebarBg,
     smallLogo,
+    ChangePasswordImg,
   };
   return (
     <BrowserRouter>
@@ -107,6 +110,15 @@ function App() {
           path="/appointment"
           element={
             <Appointment
+              images={images}
+              collaspeEvent={{ collasped, setCollasped }}
+            />
+          }
+        />
+        <Route
+          path="/addAppointment"
+          element={
+            <AddAppointment
               images={images}
               collaspeEvent={{ collasped, setCollasped }}
             />

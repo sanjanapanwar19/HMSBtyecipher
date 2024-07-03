@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Sidebar from "../../SideBar/Sidebar";
 import Header from "../../Header/Header";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
 const EditPatient = ({ images, collaspeEvent }) => {
@@ -73,7 +75,10 @@ const EditPatient = ({ images, collaspeEvent }) => {
           patientDetails
         );
         console.log("response is", res.data);
-        navigate("/patient");
+        toast.success("patient details are edited sucessfully");
+        setTimeout(() => {
+          navigate("/patient");
+        }, 2000);
       } catch (err) {
         console.log("err is", err);
       }
@@ -81,6 +86,8 @@ const EditPatient = ({ images, collaspeEvent }) => {
     fun();
   };
   return (
+    <>
+    <ToastContainer />
     <div className="wraper">
       <Sidebar images={images} collaspeEvent={{ collasped, setCollasped }} />
       <div className={`main-container ${collasped && "main-content_large"}`}>
@@ -301,11 +308,6 @@ const EditPatient = ({ images, collaspeEvent }) => {
                           onChange={handleChange}
                           rows="6"
                         >
-                          Lorem Ipsum is simply dummy text of the printing and
-                          typesetting industry. Lorem Ipsum has been the
-                          industry's standard dummy text ever since the 1500s,
-                          when an unknown printer took a galley of type and
-                          scrambled it to make a type specimen book
                         </textarea>
                       </div>
                       <div class="col-md-12 mt-4">
@@ -325,7 +327,8 @@ const EditPatient = ({ images, collaspeEvent }) => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+      </>
   );
 };
 

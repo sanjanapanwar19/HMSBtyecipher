@@ -13,7 +13,6 @@ export const addPatient = async (req, res) => {
       disease,
       bloodgroup,
       gender,
-      description,
     } = req.body;
     if (
       !fullName ||

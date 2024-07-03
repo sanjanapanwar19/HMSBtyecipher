@@ -6,6 +6,7 @@ import axios from "axios";
 import Deletepatient from "../PatientComponent/Deletepatient";
 
 const Patient = ({ images, collaspeEvent }) => {
+  console.log("patinet component rendered");
   const [patient, setPatient] = useState([]);
   const [isDeleteClick, setIsDeleteClick] = useState({
     flag: false,

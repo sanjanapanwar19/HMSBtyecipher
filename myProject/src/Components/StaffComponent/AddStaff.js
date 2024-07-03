@@ -2,6 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "../../SideBar/Sidebar";
 import Header from "../../Header/Header";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
 const AddStaff = ({ images, collaspeEvent }) => {
@@ -80,13 +82,18 @@ const AddStaff = ({ images, collaspeEvent }) => {
       const res = await axios.post("/staff/addStaff", newStaff);
       console.log("res", res);
       if (res.data.status) {
-        navigate("/staff");
+        toast.success("staff is added sucessfully");
+        setTimeout(() => {
+          navigate("/staff");
+        }, 2000);
       }
     } catch (err) {
       console.log("error is", err);
     }
   };
   return (
+    <>
+    <ToastContainer />
     <div class="wapper">
       <Sidebar images={images} collaspeEvent={{ collasped, setCollasped }} />
       <div className={`main-container ${collasped && "main-content_large"}`}>
@@ -329,7 +336,8 @@ const AddStaff = ({ images, collaspeEvent }) => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+      </>
   );
 };
 export default AddStaff;

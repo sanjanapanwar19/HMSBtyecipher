@@ -12,6 +12,7 @@ import Delete from "../assets/icons/Delete.svg";
 import Ellipse from "../assets/images/Ellipse 7.png";
 import Sidebar from "../../SideBar/Sidebar";
 import Header from "../../Header/Header";
+import { Link } from "react-router-dom";
 
 const Appointment = ({ images, collaspeEvent }) => {
   const { collasped, setCollasped } = collaspeEvent;
@@ -33,9 +34,9 @@ const Appointment = ({ images, collaspeEvent }) => {
                 </div>
                 <div class="col-xxl-4 d-flex">
                   <div class="buttons d-flex">
-                    <a href="add-appointment.html" class="ctr-btn">
+                    <Link to={'/addAppointment'} class="ctr-btn">
                       <img src={add} alt="" />
-                    </a>
+                    </Link>
                   </div>
                   <input
                     type="text"

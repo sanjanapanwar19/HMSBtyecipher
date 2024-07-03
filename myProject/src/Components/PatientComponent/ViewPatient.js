@@ -3,8 +3,11 @@ import Sidebar from "../../SideBar/Sidebar";
 import Header from "../../Header/Header";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const ViewPatient = ({ images, collaspeEvent }) => {
+  
   const location = useLocation();
   console.log("useLocation in view component", location.state.eachPatient);
   const { eachPatient } = location.state || {};

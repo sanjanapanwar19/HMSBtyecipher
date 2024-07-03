@@ -9,6 +9,7 @@ const app = express();
 import authRoute from "./routes/auth.js";
 import staffRoute from "./routes/staff.js";
 import patientRoute from "./routes/patient.js";
+import appointmentRoute from "./routes/apointment.js";
 dotenv.config();
 //mongodb+srv://Sanjanapanwar:sanjanapanwar%4019@cluster0.bminxen.mongodb.net/HospitalDatabase?retryWrites=true&w=majority
 
@@ -39,6 +40,7 @@ app.use(express.json());
 app.use("/api/auth", authRoute);
 app.use("/api/staff", staffRoute);
 app.use("/api/patient", patientRoute);
+app.use("/api/appointment",appointmentRoute)
 
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);
