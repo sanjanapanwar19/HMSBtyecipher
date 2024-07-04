@@ -9,6 +9,7 @@ import axios from "axios";
 const AddStaff = ({ images, collaspeEvent }) => {
   const [newStaff, setNewStaff] =useState (
     {
+      D_ID:"",
       role: "",
       fullName: "",
       email: "",
@@ -38,7 +39,9 @@ const AddStaff = ({ images, collaspeEvent }) => {
   };
   const validateValues = (staffItem) => {
     let errors = {};
-
+    if (!staffItem.D_ID) {
+      errors.D_ID = "this field is necessary";
+    }
     if (!staffItem.role) {
       errors.role = "this field is necessary";
     }
@@ -149,7 +152,26 @@ const AddStaff = ({ images, collaspeEvent }) => {
                     </div>
                   </div>
                   <div class="col-xxl-10">
-                    <form class="row g-3">
+                      <form class="row g-3">
+                      <div class="col-md-4">
+                        <label for="fullname" class="custom-form-label">
+                         Doctor ID <span class="required-validation">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          class="custom-input-field"
+                          id="fullname"
+                          name="D_ID"
+                          placeholder="Enter Full Name"
+                          value={newStaff.D_ID}
+                          onChange={handleChange}
+                        />
+                        {erros.D_ID && (
+                          <p className="required-validation">
+                            {erros.D_ID}
+                          </p>
+                        )}
+                      </div>
                       <div class="col-md-4">
                         <label for="role" class="custom-form-label">
                           Select Role <span class="required-validation">*</span>

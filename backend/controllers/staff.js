@@ -14,8 +14,10 @@ export const addStaff = async (req, res) => {
       specialization,
       gender,
       description,
+      D_ID
     } = req.body;
     if (
+      !D_ID||
       !role ||
       !fullName ||
       !email ||
@@ -24,7 +26,7 @@ export const addStaff = async (req, res) => {
       !specialization ||
       !gender
     ) {
-      return res.status(400).json({ msg: "please enter all the fields" });
+      return res.status(400).json({status:false, msg: "please enter all the fields" });
     }
     const newStaffMember = new Staff({
       ...req.body,
@@ -51,7 +53,7 @@ export const viewAllStaff = async (req, res) => {
     // }
     return res
       .status(200)
-      .json({ msg: "successfully accessed sraff members", allStaff });
+      .json({status:true, msg: "successfully accessed sraff members", allStaff });
   } catch (err) {
     console.log("Error is", err);
   }
@@ -84,7 +86,7 @@ export const deleteStaffById = async (req, res) => {
     const deletedStaffMember = await Staff.findByIdAndDelete({ _id: id });
     res
       .status(200)
-      .json({ msg: "staff member deleted sucessfully", deletedStaffMember });
+      .json({status:true ,msg: "staff member deleted sucessfully", deletedStaffMember });
   } catch (err) {
     console.log("error is", err);
   }

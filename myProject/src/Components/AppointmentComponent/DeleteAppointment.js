@@ -3,27 +3,38 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Deletepatient = ({ data }) => {
-  console.log("data is the delete patient component", data);
-  console.log("delete patient component has been rendered");
+const DeleteAppointment = ({ data }) => {
+  console.log("data is the delete appointment component", data);
+  console.log("delete appointment component has been rendered");
   const { images, isDeleteClick, deleteHandle } = data;
   console.log("images are", images);
-  const { flag, eachPatient } = isDeleteClick;
-  console.log("flag is", flag, "each staff is", eachPatient);
+  const { flag, eachAppointment } = isDeleteClick;
+  console.log("flag is", flag, "each appointment is", eachAppointment);
   console.log("is delete click", isDeleteClick);
-  console.log("handle delete fun is", deleteHandle);
+  console.log(
+    "handle delete fun in delete appointment component is",
+    deleteHandle
+  );
   const myStyle = {
     display: flag ? "block" : "none",
   };
-  const deleteStaffMember = (eachPatient) => {
-    const id = eachPatient._id;
-    console.log("delete patient fun of delete patinet component called");
+  const deleteStaffMember = (eachAppointment) => {
+    const id = eachAppointment._id;
+    console.log(
+      "delete appointment fun of delete appointment component called"
+    );
     const fun = async (req, res) => {
       try {
-        const res = await axios.delete(`/patient/deletePatientById/${id}`);
+        const res = await axios.delete(
+          `/appointment/deleteAppointmentById/${id}`
+        );
         console.log("res is", res.data);
+        console.log(
+          "res.data.deleted appointments",
+          res.data.deletedAppointment
+        );
         if (res.data.status) {
-          toast.success("patient is deleted sucessfully");
+          toast.success("appointment is deleted sucessfully");
           setTimeout(() => {
             deleteHandle(false, res.data);
           }, 1000);
@@ -41,7 +52,6 @@ const Deletepatient = ({ data }) => {
         className={`modal fade customDesign ${flag && "show"}`}
         id="exampleModal"
         tabindex="-1"
-        aria-labelledby="exampleModalLabel"
         aria-hidden={flag ? "true" : "false"}
         style={myStyle}
       >
@@ -57,28 +67,30 @@ const Deletepatient = ({ data }) => {
                 data-bs-dismiss="modal"
                 aria-label="Close"
                 onClick={() => {
-                  deleteHandle(false, eachPatient);
+                  deleteHandle(false, eachAppointment);
                 }}
               ></button>
             </div>
             <div class="modal-body">
               <img src={images.deleteModelIcon} alt="" class="mainIconModal" />
-              <h2>Delete Patient</h2>
-              <p>Are you sure you want to Delete {eachPatient.patientName}?</p>
+              <h2>Delete Appointment</h2>
+              <p>
+                Are you sure you want to Delete {eachAppointment.patientName}?
+              </p>
               <div class="footbutton">
                 <button
                   type="button"
                   class="custom-btn cancelBtn"
                   data-bs-dismiss="modal"
                   onClick={() => {
-                    deleteHandle(false, eachPatient);
+                    deleteHandle(false, eachAppointment);
                   }}
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => {
-                    deleteStaffMember(eachPatient);
+                    deleteStaffMember(eachAppointment);
                   }}
                   type="button"
                   class="custom-btn custom-btnCus"
@@ -94,4 +106,4 @@ const Deletepatient = ({ data }) => {
   );
 };
 
-export default Deletepatient;
+export default DeleteAppointment;

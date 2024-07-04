@@ -82,10 +82,12 @@ const Addpatient = ({ images, collaspeEvent }) => {
       console.log("response of add patient api", res.data);
       if (res.data.status) {
         console.log("res.data.status", res.data.status);
-        toast.success("patient is added sucessfully");
-        setTimeout(() => {
-          navigate("/patient");
-        }, 2000);
+        if (res.data.status) {
+          toast.success("patient is added sucessfully");
+          setTimeout(() => {
+            navigate("/patient");
+          }, 2000);
+        }
       }
     } catch (err) {
       console.log("error is", err);

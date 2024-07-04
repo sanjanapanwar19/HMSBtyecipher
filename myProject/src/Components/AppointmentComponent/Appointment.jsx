@@ -13,9 +13,40 @@ import Ellipse from "../assets/images/Ellipse 7.png";
 import Sidebar from "../../SideBar/Sidebar";
 import Header from "../../Header/Header";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import DeleteAppointment from "./DeleteAppointment";
 
 const Appointment = ({ images, collaspeEvent }) => {
+  const [appointment, setAppointment] = useState([]);
+  const [isDeleteClick, setIsDeleteClick] = useState({
+    flag: false,
+    eachAppointment: {},
+  });
+  console.log("is delete clikc", isDeleteClick);
+  console.log("collaspe event in appointment module", collaspeEvent);
   const { collasped, setCollasped } = collaspeEvent;
+  const deleteHandle = (flag, eachAppointment) => {
+    console.log("delete handle in staff called");
+    console.log("each satff is", eachAppointment);
+    setIsDeleteClick({
+      flag: flag,
+      eachAppointment: eachAppointment,
+    });
+  };
+  useEffect(() => {
+    console.log("use effect of patient module called");
+    const fun = async (req, res) => {
+      try {
+        const res = await axios.get("/appointment/viewAllAppointments");
+        console.log("res", res.data);
+        setAppointment(res.data.allAppointments);
+      } catch (err) {
+        console.log("err is", err);
+      }
+    };
+    fun();
+  }, [isDeleteClick]);
   return (
     <div class="wapper">
       <Sidebar images={images} collaspeEvent={{ collasped, setCollasped }} />
@@ -34,7 +65,7 @@ const Appointment = ({ images, collaspeEvent }) => {
                 </div>
                 <div class="col-xxl-4 d-flex">
                   <div class="buttons d-flex">
-                    <Link to={'/addAppointment'} class="ctr-btn">
+                    <Link to={"/addAppointment"} class="ctr-btn">
                       <img src={add} alt="" />
                     </Link>
                   </div>
@@ -51,7 +82,7 @@ const Appointment = ({ images, collaspeEvent }) => {
                     <table class="custom-table">
                       <thead>
                         <tr>
-                          <th scope="col">Patient Id</th>
+                          <th scope="col">Appointment ID</th>
                           <th scope="col">Patient Name</th>
                           <th scope="col">Doctor Id</th>
                           <th scope="col">Doctor Name</th>
@@ -61,144 +92,53 @@ const Appointment = ({ images, collaspeEvent }) => {
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>A01</td>
-                          <td>
-                            <img src="/assets/images/Ellipse 7.png" alt="" />
-                            <span>Pooja Patel</span>
-                          </td>
-                          <td>D01</td>
-                          <td class="d-flex">
-                            <img src="/assets/images/picture.png" alt="" />
-                            <span>
-                              Vijay Sharma
-                              <small style={{ display: "block" }}>Doctor</small>
-                            </span>
-                          </td>
-                          <td>01:30 PM</td>
-                          <td>20/10/1992</td>
-                          <td>
-                            <div class="action-btn">
-                              <a href="edit-appointment.html">
-                                <img src={edit} alt="" />
-                              </a>
-                              <a
-                                href="/sanjana"
-                                data-bs-toggle="modal"
-                                data-bs-target="#exampleModal"
-                              >
-                                <img src={Delete} alt="" />
-                              </a>
-                              <a href="view-appointment.html">
-                                <img src={view} alt="" />
-                              </a>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>A02</td>
-                          <td class="d-flex">
-                            <img src="/assets/images/picture.png" alt="" />
-                            <span>Vijay Sharma</span>
-                          </td>
-                          <td>D02</td>
-                          <td class="d-flex">
-                            <img src="/assets/images/Ellipse 7.png" alt="" />
-                            <span>
-                              Pooja Patel
-                              <small style={{ display: "block" }} alt="">
-                                Doctor
-                              </small>
-                            </span>
-                          </td>
-                          <td>03:30 PM</td>
-                          <td>20/10/1997</td>
-                          <td class="d-flex">
-                            <div class="action-btn">
-                              <a href="edit-appointment.html">
-                                <img src={edit} alt="" />
-                              </a>
-                              <a
-                                href="/dummy-link"
-                                data-bs-toggle="modal"
-                                data-bs-target="#exampleModal"
-                              >
-                                <img src={Delete} alt="" />
-                              </a>
-                              <a href="view-appointment.html">
-                                <img src={view} alt="" />
-                              </a>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>A03</td>
-                          <td>
-                            <img src={Ellipse} alt="" />
-                            <span>Pooja Patel</span>
-                          </td>
-                          <td>D03</td>
-                          <td class="d-flex">
-                            <img src="/assets/images/picture.png" alt="" />
-                            <span>
-                              Vijay Sharma
-                              <small style={{ display: "block" }}>Doctor</small>
-                            </span>
-                          </td>
-                          <td>01:30 PM</td>
-                          <td>20/10/1992</td>
-                          <td>
-                            <div class="action-btn">
-                              <a href="edit-appointment.html">
-                                <img src={edit} alt="" />
-                              </a>
-                              <a
-                                href="/dummy-link"
-                                data-bs-toggle="modal"
-                                data-bs-target="#exampleModal"
-                              >
-                                <img src={Delete} alt="" />
-                              </a>
-                              <a href="view-appointment.html">
-                                <img src={view} alt="" />
-                              </a>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>A04</td>
-                          <td class="d-flex">
-                            <img src="/assets/images/picture.png" alt="" />
-                            <span>Vijay Sharma</span>
-                          </td>
-                          <td>D04</td>
-                          <td class="d-flex">
-                            <img src="/assets/images/Ellipse 7.png" alt="" />
-                            <span>
-                              Pooja Patel
-                              <small style={{ display: "block" }}>Doctor</small>
-                            </span>
-                          </td>
-                          <td>03:30 PM</td>
-                          <td>20/10/1997</td>
-                          <td class="d-flex">
-                            <div class="action-btn">
-                              <a href="edit-appointment.html">
-                                <img src={edit} alt="" />
-                              </a>
-                              <a
-                                href="/sanjana"
-                                data-bs-toggle="modal"
-                                data-bs-target="#exampleModal"
-                              >
-                                <img src={Delete} alt="" />
-                              </a>
-                              <a href="view-appointment.html">
-                                <img src={view} alt="" />
-                              </a>
-                            </div>
-                          </td>
-                        </tr>
+                        {appointment.map((eachAppointment, index) => (
+                          <tr>
+                            <td>A0{index + 1}</td>
+                            <td>
+                              <img src="/assets/images/Ellipse 7.png" alt="" />
+                              <span>{eachAppointment.patientName}</span>
+                            </td>
+                            <td>{eachAppointment.customD_ID}</td>
+                            <td class="d-flex">
+                              <img src="/assets/images/picture.png" alt="" />
+                              <span>
+                                {eachAppointment.doctorName}
+                                <small style={{ display: "block" }}>
+                                  {eachAppointment.role}
+                                </small>
+                              </span>
+                            </td>
+                            <td>{eachAppointment.time}</td>
+                            <td>{eachAppointment.patientDob
+                            }</td>
+                            <td>
+                              <div class="action-btn">
+                                <Link
+                                  to={"/editAppointment"}
+                                  state={{ eachAppointment }}
+                                >
+                                  <img src={images.edit} alt="" />
+                                </Link>
+                                <Link
+                                  onClick={(e) => {
+                                    deleteHandle(true, eachAppointment);
+                                  }}
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#exampleModal"
+                                >
+                                  <img src={images.Delete} alt="" />
+                                </Link>
+                                <Link
+                                  to={"/viewAppointment"}
+                                  state={{ eachAppointment }}
+                                >
+                                  <img src={images.view} alt="" />
+                                </Link>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -208,50 +148,7 @@ const Appointment = ({ images, collaspeEvent }) => {
           </div>
         </div>
       </div>
-      <div
-        class="modal fade customDesign"
-        id="exampleModal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">
-                &nbsp;
-              </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <img
-                src="assets/images/deleteModal_icon.png"
-                alt=""
-                class="mainIconModal"
-              />
-              <h2>Delete Appointment</h2>
-              <p>Are you sure you want to Delete Vijay Sharma?</p>
-              <div class="footbutton">
-                <button
-                  type="button"
-                  class="custom-btn cancelBtn"
-                  data-bs-dismiss="modal"
-                >
-                  Cancel
-                </button>
-                <button type="button" class="custom-btn custom-btnCus">
-                  Confirm
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <DeleteAppointment data={{ isDeleteClick, deleteHandle, images }} />
     </div>
   );
 };

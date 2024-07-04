@@ -12,11 +12,11 @@ export const register = async (req, res) => {
       return res.status(400).json({ msg: "please enter all the fields" });
     }
     if (confirmPassword !== password) {
-      return res.status(400).json({ msg: "both password should match" });
+      return res.status(400).json({status:false, msg: "both password should match" });
     }
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ msg: "email is already exits" });
+      return res.status(400).json({status:false, msg: "email is already exits" });
     }
     const salt = bcrypt.genSaltSync(10);
     const hash = await bcrypt.hash(req.body.password.toString(), salt);
@@ -40,7 +40,7 @@ export const login = async (req, res) => {
   try {
     const { email } = req.body;
     if (!email || !req.body.password) {
-      return res.status(400).json({ msg: "Please enter all the fields" });
+      return res.status(400).json({status:false, msg: "Please enter all the fields" });
     }
     const user = await User.findOne({ email });
     if (!user) {
@@ -52,7 +52,7 @@ export const login = async (req, res) => {
       user.password
     );
     if (!validPassword) {
-      return res.status(400).send({ msg: "Incorrect password." });
+      return res.status(400).send({status:false, msg: "Incorrect password." });
     }
     console.log("password is ", validPassword);
     const token = jwt.sign({ id: user._id }, process.env.KEY, {
@@ -77,12 +77,12 @@ export const forgotPassword = async (req, res) => {
   const { email } = req.body;
   console.log("email is", email);
   if (!email) {
-    res.status(400).json({ msg: "please enter email" });
+    res.status(400).json({ status:false,msg: "please enter email" });
   }
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.send({ msg: "User not registered" });
+      return res.json({status:false, msg: "User not registered" });
     }
     console.log("user is", user);
     const token = jwt.sign({ id: user._id }, process.env.KEY, {
@@ -105,7 +105,7 @@ export const forgotPassword = async (req, res) => {
 
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        res.json({ message: "error sending email" });
+        res.json({status:false, message: "error sending email" });
       } else {
         res.json({ status: true, message: "email sent" });
       }
@@ -150,14 +150,14 @@ export const chnagePassword = async (req, res) => {
     const user = await User.findById({ _id: id });
     console.log("user is", user);
     if (!user) {
-      return res.status(400).json({ msg: "user not found" });
+      return res.status(400).json({ status:false,msg: "user not found" });
     }
     const validPassword = await bcrypt.compare(
       req.body.oldPassword,
       user.password
     );
     if (!validPassword) {
-      return res.status(400).json({ msg: "old passwrod is incorrect" });
+      return res.status(400).json({ status:false,msg: "old passwrod is incorrect" });
     }
     if (req.body.newPassword !== req.body.confirmPassword) {
       return res
@@ -176,7 +176,7 @@ export const chnagePassword = async (req, res) => {
     );
     return res
       .status(200)
-      .json({ msg: "password changes sucessfully", updatedLoggedUser });
+      .json({status:true, msg: "password changes sucessfully", updatedLoggedUser });
   } catch (err) {
     console.log("error is", err);
   }

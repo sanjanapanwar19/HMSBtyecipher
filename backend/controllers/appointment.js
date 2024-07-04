@@ -4,28 +4,135 @@ import Staff from "../models/StaffModel.js";
 
 export const addAppointment = async (req, res) => {
   console.log("add appointment api called");
-  const newappointment = req.body;
-  const { patientName, doctorName, patientEmail, time, description } = req.body;
+  const {
+    patientName,
+    patientEmail,
+    doctorName,
+    doctorEmail,
+    time,
+    description,
+  } = req.body;
   console.log("patient name is", patientName);
-  console.log("doctor name is", doctorName);
   console.log("patient email is", patientEmail);
+  console.log("doctor name is", doctorName);
+  console.log("doctor email is", doctorEmail);
   console.log("time is", time);
   console.log("description is", description);
   try {
-    const patientData = await Patient.findOne({ fullName: patientName });
-    if (!patientData) {
-      return res.json({status:false,msg:"patient does not exits"})
+    const isExitsPatient = await Patient.findOne({ email: patientEmail });
+    if (!isExitsPatient) {
+      return res.json({ status: false, msg: "unknown patient" });
     }
-    const staffData = await Staff.findOne({ fullName: doctorName });
-    if (!staffData) {
-      return res.json({status:false,msg:"staff does not exits"})
+    console.log("is exists patient is", isExitsPatient);
+    const isExitsStaff = await Staff.findOne({ email: doctorEmail });
+    if (!isExitsStaff) {
+      return res.json({ status: false, msg: "unknown patient" });
     }
-    console.log("patient data is", patientName);
-    log
+    console.log("is existing staff is", isExitsStaff);
+    const newAppointment = new Appointment({
+      ...req.body,
+      patientId: isExitsPatient._id,
+      staffId: isExitsStaff._id,
+      customD_ID: isExitsStaff.D_ID,
+      patientDob: isExitsPatient.dob,
+    });
+    const bookedAppointment = await newAppointment.save();
+    console.log("booked appointment is", bookedAppointment);
+    return res.json({
+      status: true,
+      mag: "appointment booked sucessfully",
+      bookedAppointment,
+    });
   } catch (err) {
-    console.log("err is",err);
+    console.log("error is", err);
   }
 };
 export const viewAllAppointments = async (req, res) => {
   console.log("view all appointment api called");
+  try {
+    const allAppointments = await Appointment.find();
+    console.log("all staff ", allAppointments);
+    // if (allStaff.length === 0) {
+    //   return res.status(400).json({ msg: "No staff members found" });
+    // }
+    return res
+      .status(200)
+      .json({status:true ,msg: "successfully accessed appointment data", allAppointments });
+  } catch (err) {
+    console.log("Error is", err);
+  }
+};
+export const deleteAppointmentById = async (req, res) => {
+  console.log("delete appointment by id called");
+  const id = req.params.id;
+  console.log("id is", id);
+  try {
+    const deletedAppointment = await Appointment.findByIdAndDelete({ _id: id });
+    res
+      .status(200)
+      .json({status:true, msg: "patient member deleted sucessfully", deletedAppointment });
+  } catch (err) {
+    console.log("error is", err);
+  }
+};
+export const updateAppointmentById = async (req, res) => {
+  console.log("updata appointment  by id api called");
+  console.log(req.params.id);
+  console.log("body", req.body);
+  const id = req.params.id;
+  const data = req.body;
+  const {
+    patientName,
+    patientEmail,
+    doctorName,
+    doctorEmail,
+    time,
+    description,
+  } = req.body;
+  console.log("patient name is", patientName);
+  console.log("patient email is", patientEmail);
+  console.log("doctor name is", doctorName);
+  console.log("doctor email is", doctorEmail);
+  console.log("time is", time);
+  console.log("description is", description);
+  try {
+    const isExitsPatient = await Patient.findOne({ email: patientEmail });
+    if (!isExitsPatient) {
+      return res.json({ status: false, msg: "unknown patient" });
+    }
+    console.log("is exists patient is", isExitsPatient);
+    if (isExitsPatient.fullName !== patientName) {
+      return res.json({ status: false, msg: "patient name or email is wrong" });
+    }
+    const isExitsStaff = await Staff.findOne({ email: doctorEmail });
+    if (!isExitsStaff) {
+      return res.json({ status: false, msg: "unknown patient" });
+    }
+    if (isExitsStaff.fullName !== doctorName) {
+      return res.json({ status: false, msg: "staff name or email is wrong" });
+    }
+    console.log("is existing staff is", isExitsStaff);
+    const newObj = {
+      patientName,
+      patientEmail,
+      doctorName,
+      doctorEmail,
+      time,
+      description,
+      patientId: isExitsPatient._id,
+      staffId: isExitsStaff._id,
+      customD_ID: isExitsStaff.D_ID,
+    };
+   console.log("new updated obj",newObj);
+    const updatedPatient = await Appointment.findByIdAndUpdate(
+      { _id: id },
+      { $set: newObj},
+      { new: true }
+    );
+    return res
+      .status(200)
+      .json({ status: true, msg: "updated successfully", updatedPatient });
+  } catch (err) {
+    console.log("err is", err);
+  }
 };

@@ -1,6 +1,10 @@
 import mongoose, { Schema } from "mongoose";
 const staffSchema = new mongoose.Schema(
   {
+    D_ID: {
+      type: String,
+      required: true,
+    },
     role: {
       type: String,
       required: true,

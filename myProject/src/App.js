@@ -40,6 +40,8 @@ import EditPatient from "./Components/PatientComponent/EditPatient";
 import ViewPatient from "./Components/PatientComponent/ViewPatient";
 import Appointment from "./Components/AppointmentComponent/Appointment";
 import AddAppointment from "./Components/AppointmentComponent/AddAppointment";
+import EditAppointment from "./Components/AppointmentComponent/EditAppointment";
+import ViewAppointment from "./Components/AppointmentComponent/ViewAppointment";
 
 import {
   BrowserRouter,
@@ -87,7 +89,10 @@ function App() {
           path="/forgotPassword"
           element={<ForgotPassword images={images} />}
         />
-        <Route path="/resetPassword/:token" element={<ResetPassword />} />
+        <Route
+          path="/resetPassword/:token"
+          element={<ResetPassword images={images} />}
+        />
         <Route
           path="/changePassword"
           element={
@@ -119,6 +124,24 @@ function App() {
           path="/addAppointment"
           element={
             <AddAppointment
+              images={images}
+              collaspeEvent={{ collasped, setCollasped }}
+            />
+          }
+        />
+        <Route
+          path="/editAppointment"
+          element={
+            <EditAppointment
+              images={images}
+              collaspeEvent={{ collasped, setCollasped }}
+            />
+          }
+        />
+        <Route
+          path="/viewAppointment"
+          element={
+            <ViewAppointment
               images={images}
               collaspeEvent={{ collasped, setCollasped }}
             />

@@ -23,7 +23,7 @@ export const addPatient = async (req, res) => {
       !bloodgroup ||
       !gender
     ) {
-      return res.status(400).json({ msg: "please enter all the fields" });
+      return res.status(400).json({status:false, msg: "please enter all the fields" });
     }
     const newPatient = new Patient({
       ...req.body,
@@ -50,7 +50,7 @@ export const viewAllPatient = async (req, res) => {
     // }
     return res
       .status(200)
-      .json({ msg: "successfully accessed sraff members", allPatient });
+      .json({status:true, msg: "successfully accessed sraff members", allPatient });
   } catch (err) {
     console.log("Error is", err);
   }
@@ -83,7 +83,7 @@ export const deletePatientById = async (req, res) => {
     const deletedPatient = await Patient.findByIdAndDelete({ _id: id });
     res
       .status(200)
-      .json({ msg: "staff member deleted sucessfully", deletePatientById });
+      .json({status:true, msg: "staff member deleted sucessfully", deletePatientById });
   } catch (err) {
     console.log("error is", err);
   }

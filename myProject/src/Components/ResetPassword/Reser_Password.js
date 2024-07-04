@@ -2,11 +2,27 @@ import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import dummyLogo from "../assets/images/dummy_logo.png";
-const ResetPassword = () => {
+const ResetPassword = ({ images }) => {
   const navigate = useNavigate();
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
   const { token } = useParams();
+  const [passwordToggle, setPasswordToggle] = useState({
+    password: false,
+    confirmPassword: false,
+  });
+  const handlePasswordToggle = (e, key, value) => {
+    e.preventDefault();
+    console.log(
+      "e in the handle password toggle fun of change passwrod component is",
+      e
+    );
+    console.log("and same fun key is", key);
+    setPasswordToggle((prevData) => ({
+      ...prevData,
+      [key]: value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,8 +61,21 @@ const ResetPassword = () => {
                       <label for="newPassword" class="custom-form-label">
                         New Password
                       </label>
+                      <div className="possionIconInput">
+                      <img
+                        onClick={(e) => {
+                              handlePasswordToggle(
+                                e,
+                                "password",
+                                !passwordToggle.password
+                              );
+                            }}
+                        src={passwordToggle.password ? images.eye:images.offEye}
+                        alt=""
+                        class="eyeIconView"
+                      />
                       <input
-                        type="password"
+                        type={passwordToggle.password?"text":"password"}
                         class="custom-input-field"
                         id="newPassword"
                         placeholder="Enter New Password"
@@ -55,11 +84,26 @@ const ResetPassword = () => {
                           setPassword(e.target.value);
                         }}
                       />
+                      </div>
+                     
                     </div>
                     <div class="col-md-12">
                       <label for="confirmPassword" class="custom-form-label">
                         Confirm Password
                       </label>
+                      <div>
+                      <img
+                        onClick={(e) => {
+                              handlePasswordToggle(
+                                e,
+                                "confirmPassword",
+                                !passwordToggle.confirmPassword
+                              );
+                            }}
+                        src={passwordToggle.confirmPassword ? images.eye:images.offEye}
+                        alt=""
+                        class="eyeIconView"
+                      />
                       <input
                         type="password"
                         class="custom-input-field"
@@ -70,6 +114,8 @@ const ResetPassword = () => {
                           setConfirmPassword(e.target.value);
                         }}
                       />
+                      </div>
+                      
                     </div>
                     <div class="col-md-12 mt-4">
                       <button onClick={handleSubmit} class="custom-btn">

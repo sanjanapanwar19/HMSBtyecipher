@@ -3,7 +3,6 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 const DeleteStaff = ({ data }) => {
   console.log("delete staff component has been rendered");
   const { images, isDeleteClick, deleteHanlde } = data;
@@ -22,10 +21,12 @@ const DeleteStaff = ({ data }) => {
       try {
         const res = await axios.delete(`/staff/deleteStaffById/${id}`);
         console.log("res is", res.data);
-        toast.success("staff is added sucessfully");
-        setTimeout(() => {
-          deleteHanlde(false, eachStaff);
-        }, 1000);
+        if (res.data.status) {
+          toast.success("staff is added sucessfully");
+          setTimeout(() => {
+            deleteHanlde(false, eachStaff);
+          }, 1000);
+        }
       } catch (err) {
         console.log("err is", err);
       }
@@ -34,61 +35,61 @@ const DeleteStaff = ({ data }) => {
   };
   return (
     <>
-      <ToastContainer/>
-    <div
-      className={`modal fade customDesign ${flag && "show"}`}
-      id="exampleModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden={flag ? "true" : "false"}
-      style={myStyle}
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">
-              &nbsp;
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-              onClick={() => {
-                deleteHanlde(false, eachStaff);
-              }}
-            ></button>
-          </div>
-          <div class="modal-body">
-            <img src={images.deleteModelIcon} alt="" class="mainIconModal" />
-            <h2>Delete Staff</h2>
-            <p>Are you sure you want to Delete {eachStaff.fullName}</p>
-
-            <div class="footbutton">
+      <ToastContainer />
+      <div
+        className={`modal fade customDesign ${flag && "show"}`}
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden={flag ? "true" : "false"}
+        style={myStyle}
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                &nbsp;
+              </h5>
               <button
                 type="button"
-                class="custom-btn cancelBtn"
+                class="btn-close"
                 data-bs-dismiss="modal"
+                aria-label="Close"
                 onClick={() => {
                   deleteHanlde(false, eachStaff);
                 }}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  deleteStaffMember(eachStaff);
-                }}
-                type="button"
-                class="custom-btn custom-btnCus"
-              >
-                Confirm
-              </button>
+              ></button>
+            </div>
+            <div class="modal-body">
+              <img src={images.deleteModelIcon} alt="" class="mainIconModal" />
+              <h2>Delete Staff</h2>
+              <p>Are you sure you want to Delete {eachStaff.fullName}</p>
+
+              <div class="footbutton">
+                <button
+                  type="button"
+                  class="custom-btn cancelBtn"
+                  data-bs-dismiss="modal"
+                  onClick={() => {
+                    deleteHanlde(false, eachStaff);
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    deleteStaffMember(eachStaff);
+                  }}
+                  type="button"
+                  class="custom-btn custom-btnCus"
+                >
+                  Confirm
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 };

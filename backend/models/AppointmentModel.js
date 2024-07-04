@@ -1,7 +1,23 @@
 import mongoose, { Schema } from "mongoose";
 const appointmentSchema = new mongoose.Schema(
   {
+    patientId: {
+      type: String,
+      required: true,
+    },
     patientName: {
+      type: String,
+      required: true,
+    },
+    patientEmail: {
+      type: String,
+      required: true,
+    },
+    staffId: {
+      type: String,
+      required: true,
+    },
+    customD_ID: {
       type: String,
       required: true,
     },
@@ -9,11 +25,9 @@ const appointmentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    patientDob: {
+    doctorEmail: {
       type: String,
-    },
-    patientEmail: {
-      type: String,
+      required: true,
     },
     time: {
       type: String,
@@ -21,8 +35,13 @@ const appointmentSchema = new mongoose.Schema(
     },
     description: {
       type: String,
+    },
+    patientDob: {
+      type: String,
       required: true,
     },
+    
+    
   },
   { timestamps: true }
 );
