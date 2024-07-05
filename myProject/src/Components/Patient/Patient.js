@@ -7,7 +7,9 @@ import Deletepatient from "../PatientComponent/Deletepatient";
 
 const Patient = ({ images, collaspeEvent }) => {
   console.log("patinet component rendered");
+  const [pdata, setPdata] = useState([]);
   const [patient, setPatient] = useState([]);
+  const [searchString, setSearchString] = useState("");
   const [isDeleteClick, setIsDeleteClick] = useState({
     flag: false,
     eachPatient: {},
@@ -23,12 +25,27 @@ const Patient = ({ images, collaspeEvent }) => {
       eachPatient: eachPatient,
     });
   };
+
+  const searchHandle = () => {
+    console.log("seach handle fun of patient component called");
+    const searchStringLowerCase = searchString.toLowerCase();
+    console.log("searchStringLowerCase", searchStringLowerCase);
+    const serachResult = pdata.filter((item) => {
+      return (
+        item.fullName.toLowerCase().includes(searchStringLowerCase) ||
+        item.disease.toLowerCase().includes(searchStringLowerCase) ||
+        item.gender.toLowerCase().startsWith(searchStringLowerCase)
+      );
+    });
+    setPatient(serachResult);
+  };
   useEffect(() => {
     console.log("use effect of patient module called");
     const fun = async (req, res) => {
       try {
         const res = await axios.get("/patient/viewAllPatient");
         console.log("res", res.data.allPatient);
+        setPdata(res.data.allPatient);
         setPatient(res.data.allPatient);
       } catch (err) {
         console.log("err is", err);
@@ -36,6 +53,15 @@ const Patient = ({ images, collaspeEvent }) => {
     };
     fun();
   }, [isDeleteClick]);
+
+  useEffect(() => {
+    console.log("use effect is called when search string changes");
+    if (searchString.length > 0) {
+      searchHandle();
+    } else {
+      setPatient(pdata);
+    }
+  }, [searchString]);
   return (
     <div className="wrapper">
       <Sidebar images={images} collaspeEvent={{ collasped, setCollasped }} />
@@ -62,6 +88,10 @@ const Patient = ({ images, collaspeEvent }) => {
                     type="text"
                     class="custom-input-field"
                     placeholder="Search Patient"
+                    value={searchString}
+                    onChange={(e) => {
+                      setSearchString(e.target.value);
+                    }}
                   />
                 </div>
               </div>

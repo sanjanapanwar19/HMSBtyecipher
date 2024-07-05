@@ -1,6 +1,8 @@
-const str = "sanjanaaaaaaa";
-if (str.length < 8) {
-        console.log("yes it is");
+
+
+const str = "sanjana panwar";
+if (str.toLowerCase().includes('')) {
+        console.log("yes includes");
 } else {
-        console.log("no it is not");
+        console.log("no it does not include");
 }

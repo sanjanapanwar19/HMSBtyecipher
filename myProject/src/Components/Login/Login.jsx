@@ -69,6 +69,9 @@ const Login = ({ images }) => {
       }
     } catch (err) {
       console.log("error is", err);
+      console.log("err field", err.response.data.field);
+      console.log("err message", err.response.data.msg);
+      setErros({[err.response.data.field]:err.response.data.msg})
     }
   };
   return (

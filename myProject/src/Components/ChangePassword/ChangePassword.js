@@ -84,6 +84,7 @@ const ChangePassword = ({ images, collaspeEvent }) => {
         }
       } catch (err) {
         console.log("error is", err);
+        
       }
     };
     fun();

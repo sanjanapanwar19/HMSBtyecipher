@@ -18,6 +18,8 @@ const ForgotPassword = ({images}) => {
       console.log(res.data);
     } catch(err) {
       console.log("error is", err);
+      console.log("field", err.response.data.field);
+      console.log("message is", err.response.data.msg);
     }
   };
   return (

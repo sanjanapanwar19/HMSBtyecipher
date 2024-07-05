@@ -4,6 +4,7 @@ import axios from "axios";
 import dummyLogo from "../assets/images/dummy_logo.png";
 const ResetPassword = ({ images }) => {
   const navigate = useNavigate();
+  const [erros, setErros] = useState({});
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
   const { token } = useParams();
@@ -23,10 +24,36 @@ const ResetPassword = ({ images }) => {
       [key]: value,
     }));
   };
+  const validateValues = (pswrd) => {
+    let errors = {};
 
+    if (!pswrd.password) {
+      errors.password = "please enter password";
+    }
+   else if (!pswrd.confirmPassword) {
+      errors.confirmPassword = "please enter confrom password";
+    } else if (pswrd.password !== pswrd.confirmPassword) {
+      errors.password = "both password should match"
+      errors.confirmPassword="both password should match"
+    }
+
+    console.log("erros in the valid inputs", errors);
+    return errors;
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("handle submit fun of reset password hs been called");
+    const err = validateValues({ password, confirmPassword });
+    console.log("err", err);
+    setErros(err);
+    const length = Object.keys(err).length;
+    console.log("length in add patient ", length);
+    if (length === 0) {
+      finishSubmiting();
+    }
+  };
+  const finishSubmiting = async () => {
+    console.log("finish submit called");
     try {
       const res = await axios.post(`/auth/resetPassword/${token}`, {
         password,
@@ -62,60 +89,72 @@ const ResetPassword = ({ images }) => {
                         New Password
                       </label>
                       <div className="possionIconInput">
-                      <img
-                        onClick={(e) => {
-                              handlePasswordToggle(
-                                e,
-                                "password",
-                                !passwordToggle.password
-                              );
-                            }}
-                        src={passwordToggle.password ? images.eye:images.offEye}
-                        alt=""
-                        class="eyeIconView"
-                      />
-                      <input
-                        type={passwordToggle.password?"text":"password"}
-                        class="custom-input-field"
-                        id="newPassword"
-                        placeholder="Enter New Password"
-                        value={password}
-                        onChange={(e) => {
-                          setPassword(e.target.value);
-                        }}
-                      />
+                        <img
+                          onClick={(e) => {
+                            handlePasswordToggle(
+                              e,
+                              "password",
+                              !passwordToggle.password
+                            );
+                          }}
+                          src={
+                            passwordToggle.password ? images.eye : images.offEye
+                          }
+                          alt=""
+                          class="eyeIconView"
+                        />
+                        <input
+                          type={passwordToggle.password ? "text" : "password"}
+                          class="custom-input-field"
+                          id="newPassword"
+                          placeholder="Enter New Password"
+                          value={password}
+                          onChange={(e) => {
+                            setPassword(e.target.value);
+                          }}
+                        />
                       </div>
-                     
+                      {erros.password && (
+                        <p className="required-validation">{erros.password}</p>
+                      )}
                     </div>
                     <div class="col-md-12">
                       <label for="confirmPassword" class="custom-form-label">
                         Confirm Password
                       </label>
-                      <div>
-                      <img
-                        onClick={(e) => {
-                              handlePasswordToggle(
-                                e,
-                                "confirmPassword",
-                                !passwordToggle.confirmPassword
-                              );
-                            }}
-                        src={passwordToggle.confirmPassword ? images.eye:images.offEye}
-                        alt=""
-                        class="eyeIconView"
-                      />
-                      <input
-                        type="password"
-                        class="custom-input-field"
-                        id="confirmPassword"
-                        placeholder="Enter Confirm Password"
-                        value={confirmPassword}
-                        onChange={(e) => {
-                          setConfirmPassword(e.target.value);
-                        }}
-                      />
+                      <div className="possionIconInput">
+                        <img
+                          onClick={(e) => {
+                            handlePasswordToggle(
+                              e,
+                              "confirmPassword",
+                              !passwordToggle.confirmPassword
+                            );
+                          }}
+                          src={
+                            passwordToggle.confirmPassword
+                              ? images.eye
+                              : images.offEye
+                          }
+                          alt=""
+                          class="eyeIconView"
+                        />
+                        <input
+                          type={passwordToggle.confirmPassword? "text" : "password"}
+                          class="custom-input-field"
+                          id="confirmPassword"
+                          placeholder="Enter Confirm Password"
+                          value={confirmPassword}
+                          onChange={(e) => {
+                            setConfirmPassword(e.target.value);
+                          }}
+                        />
                       </div>
-                      
+                      {erros.confirmPassword && (
+                        <p className="required-validation">
+                          {erros.confirmPassword}
+                        </p>
+                      )}
                     </div>
                     <div class="col-md-12 mt-4">
                       <button onClick={handleSubmit} class="custom-btn">

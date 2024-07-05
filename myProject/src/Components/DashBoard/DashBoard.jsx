@@ -6,8 +6,10 @@ import axios from "axios";
 const DashBoard = ({ images, collaspeEvent }) => {
   const [totalPatients, setTotalPatients] = useState([]);
   const [totalStaffMember, setTotalStaff] = useState([]);
+  const [totalAppointments, setTotalAppointments] = useState([]);
   console.log("total patients are", totalPatients.length);
   console.log("total staff members are", totalStaffMember.length);
+  console.log("total appointments are", totalAppointments.length);
   console.log("collaspse event is dashboard component", collaspeEvent);
   const { collasped, setCollasped } = collaspeEvent;
 
@@ -30,8 +32,18 @@ const DashBoard = ({ images, collaspeEvent }) => {
         console.log("err is", err);
       }
     };
+    const fun3 = async (req, res) => {
+      try {
+        const res3 = await axios.get("/appointment/viewAllAppointments");
+        console.log("res 3", res3.data.allAppointments);
+        setTotalAppointments(res3.data.allAppointments);
+      } catch (err) {
+        console.log("err is", err);
+      }
+    };
     fun1();
     fun2();
+    fun3();
   }, []);
 
   return (
@@ -68,7 +80,7 @@ const DashBoard = ({ images, collaspeEvent }) => {
                       <div class="custom-card presentEmployee">
                         <div class="left-data">
                           <div class="heading">
-                            <h2 class="count">70</h2>
+                            <h2 class="count">{totalAppointments.length}</h2>
                             <span>Today's Appointments</span>
                           </div>
                         </div>

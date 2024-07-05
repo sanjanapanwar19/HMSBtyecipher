@@ -18,11 +18,13 @@ import axios from "axios";
 import DeleteAppointment from "./DeleteAppointment";
 
 const Appointment = ({ images, collaspeEvent }) => {
+  const [adata, setAdata] = useState([]);
   const [appointment, setAppointment] = useState([]);
   const [isDeleteClick, setIsDeleteClick] = useState({
     flag: false,
     eachAppointment: {},
   });
+  const [searchString, setSearchString] = useState("");
   console.log("is delete clikc", isDeleteClick);
   console.log("collaspe event in appointment module", collaspeEvent);
   const { collasped, setCollasped } = collaspeEvent;
@@ -34,12 +36,25 @@ const Appointment = ({ images, collaspeEvent }) => {
       eachAppointment: eachAppointment,
     });
   };
+  const searchHandle = () => {
+    console.log("seach handle fun of appointment component called");
+    const searchStringLowerCase = searchString.toLowerCase();
+    console.log("searchStringLowerCase", searchStringLowerCase);
+    const serachResult = adata.filter((item) => {
+      return (
+        item.patientName.toLowerCase().includes(searchStringLowerCase) ||
+        item.doctorName.toLowerCase().includes(searchStringLowerCase) 
+      );
+    });
+    setAppointment(serachResult);
+  };
   useEffect(() => {
     console.log("use effect of patient module called");
     const fun = async (req, res) => {
       try {
         const res = await axios.get("/appointment/viewAllAppointments");
         console.log("res", res.data);
+        setAdata(res.data.allAppointments);
         setAppointment(res.data.allAppointments);
       } catch (err) {
         console.log("err is", err);
@@ -47,6 +62,15 @@ const Appointment = ({ images, collaspeEvent }) => {
     };
     fun();
   }, [isDeleteClick]);
+
+  useEffect(() => {
+    console.log("use effect is called when search string changes");
+    if (searchString.length > 0) {
+      searchHandle();
+    } else {
+      setAppointment(adata);
+    }
+  }, [searchString]);
   return (
     <div class="wapper">
       <Sidebar images={images} collaspeEvent={{ collasped, setCollasped }} />
@@ -73,6 +97,10 @@ const Appointment = ({ images, collaspeEvent }) => {
                     type="text"
                     class="custom-input-field"
                     placeholder="Search Appointments"
+                    value={searchString}
+                    onChange={(e) => {
+                      setSearchString(e.target.value);
+                    }}
                   />
                 </div>
               </div>
@@ -110,8 +138,7 @@ const Appointment = ({ images, collaspeEvent }) => {
                               </span>
                             </td>
                             <td>{eachAppointment.time}</td>
-                            <td>{eachAppointment.patientDob
-                            }</td>
+                            <td>{eachAppointment.patientDob}</td>
                             <td>
                               <div class="action-btn">
                                 <Link

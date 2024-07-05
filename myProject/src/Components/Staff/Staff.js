@@ -6,11 +6,13 @@ import axios from "axios";
 import DeleteStaff from "../StaffComponent/DeleteStaff";
 
 const Staff = ({ images, collaspeEvent }) => {
+  const [sdata, setSdata] = useState([]);
   const [staffMember, setStaffMember] = useState([]);
   const [isDeleteClick, setIsDeleteClick] = useState({
     flag: false,
     eachStaff: {},
   });
+  const [searchString, setSearchString] = useState("");
   console.log("is delete clikc", isDeleteClick);
   const { collasped, setCollasped } = collaspeEvent;
   const deleteHanlde = (flag, eachStaff) => {
@@ -20,7 +22,20 @@ const Staff = ({ images, collaspeEvent }) => {
       flag: flag,
       eachStaff: eachStaff,
     });
-  
+  };
+  const searchHandle = () => {
+    console.log("seach handle fun of staff component called");
+    const searchStringLowerCase = searchString.toLowerCase();
+    console.log("searchStringLowerCase", searchStringLowerCase);
+    const serachResult = sdata.filter((item) => {
+      return (
+        item.fullName.toLowerCase().includes(searchStringLowerCase) ||
+        item.gender.toLowerCase().startsWith(searchStringLowerCase) ||
+        item.specialization.toLowerCase().startsWith(searchStringLowerCase) ||
+        item.role.toLowerCase().startsWith(searchStringLowerCase) 
+      );
+    });
+    setStaffMember(serachResult);
   };
   useEffect(() => {
     console.log("use effect hook of staff component has been called");
@@ -28,13 +43,25 @@ const Staff = ({ images, collaspeEvent }) => {
       try {
         const res = await axios.get("/staff/viewAllStaff");
         console.log("res", res.data.allStaff);
+        setSdata(res.data.allStaff);
         setStaffMember(res.data.allStaff);
       } catch (err) {
         console.log("err is", err);
       }
     };
     fun();
-  },[isDeleteClick] );
+  }, [isDeleteClick]);
+
+  useEffect(() => {
+    console.log(
+      "use effect is called when search string changes in staff component"
+    );
+    if (searchString.length > 0) {
+      searchHandle();
+    } else {
+      setStaffMember(sdata);
+    }
+  }, [searchString]);
 
   return (
     <div className="wrapper">
@@ -62,6 +89,10 @@ const Staff = ({ images, collaspeEvent }) => {
                     type="text"
                     class="custom-input-field"
                     placeholder="Search Staff"
+                    value={searchString}
+                    onChange={(e) => {
+                      setSearchString(e.target.value);
+                    }}
                   />
                 </div>
               </div>
