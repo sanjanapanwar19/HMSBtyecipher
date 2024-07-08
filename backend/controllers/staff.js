@@ -45,6 +45,7 @@ export const addStaff = async (req, res) => {
 
 export const viewAllStaff = async (req, res) => {
   console.log("view staff api has been called");
+  console.log("inside view staff api");
   try {
     const allStaff = await Staff.find();
     console.log("all staff ", allStaff);

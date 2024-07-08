@@ -7,6 +7,7 @@ import Sidebar from "../../SideBar/Sidebar";
 import Header from "../../Header/Header";
 
 const EditAppointment = ({ images, collaspeEvent }) => {
+  console.log("edit appointment component has been rendered");
   const [erros, setErros] = useState({});
   const { collasped, setCollasped } = collaspeEvent;
   const location = useLocation();

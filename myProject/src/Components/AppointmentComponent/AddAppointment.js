@@ -13,7 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 const AddAppointment = ({ images, collaspeEvent }) => {
-  console.log("add appointment componentn rendered");
+  console.log("add appointment component has been rendered");
   const [newAppointment, setNewAppointment] = useState({
     patientName: "",
     patientEmail: "",
