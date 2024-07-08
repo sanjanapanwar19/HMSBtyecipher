@@ -173,7 +173,7 @@ export const chnagePassword = async (req, res) => {
     if (req.body.newPassword !== req.body.confirmPassword) {
       return res
         .status(400)
-        .json({ msg: "new password and confirm password should match" });
+        .json({status:false,field1:"password",field2:"confirmPassword",msg: "new password and confirm password should match" });
     }
     const salt = bcrypt.genSaltSync(10);
     const newHashedPassword = await bcrypt.hash(
