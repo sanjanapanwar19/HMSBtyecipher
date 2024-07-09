@@ -40,7 +40,8 @@ const ChangePassword = ({ images, collaspeEvent }) => {
       errors.newPassword = "please enter new password";
     } else if (password.length < 8) {
       errors.newPassword = "password length should be more than 8 characters";
-    } else if (!password.confirmPassword) {
+    }
+    if (!password.confirmPassword) {
       errors.confirmPassword = "Please confirm your passsord";
     } else if (password.newPassword !== password.confirmPassword) {
       errors.newPassword = "Both passord should match";

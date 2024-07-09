@@ -28,7 +28,7 @@ const Login = ({ images }) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     let errors = {};
     if (!credentials.email) {
-      errors.email = "please enter email";
+      errors.email = "plea'se enter email";
     } else if (!emailPattern.test(credentials.email)) {
       errors.email = "please enter a valid email";
     }

@@ -23,6 +23,7 @@ import camera from "../src/Components/assets/images/camera.png";
 import deleteModelIcon from "../src/Components/assets/images/deleteModal_icon.png";
 import dummyLogo from "../src/Components/assets/images/dummy_logo.png";
 import dummyProfile from "../src/Components/assets/images/dummyProfile.png";
+import profileImage from "../src/Components/assets/images/profileImage.png"
 import editIcon from "../src/Components/assets/images/editIcon.png";
 import Ellipse7 from "../src/Components/assets/images/Ellipse 7.png";
 import eye from "../src/Components/assets/images/eye.png";
@@ -79,6 +80,7 @@ function App() {
     sidebarBg,
     smallLogo,
     ChangePasswordImg,
+    profileImage
   };
   return (
     <BrowserRouter>

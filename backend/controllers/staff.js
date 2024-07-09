@@ -4,6 +4,9 @@ import { login } from "./auth.js";
 export const addStaff = async (req, res) => {
   console.log("add staff api has been called");
   console.log("request body is", req.body);
+  if (req.file) {
+    req.body.profileImage = `/uploads/profiles/${req.file.filename}`;
+  }
   try {
     const {
       role,
@@ -14,20 +17,10 @@ export const addStaff = async (req, res) => {
       specialization,
       gender,
       description,
-      D_ID
+      D_ID,
+      profileImage
     } = req.body;
-    if (
-      !D_ID||
-      !role ||
-      !fullName ||
-      !email ||
-      !dob ||
-      !contactNumber ||
-      !specialization ||
-      !gender
-    ) {
-      return res.status(400).json({status:false, msg: "please enter all the fields" });
-    }
+   
     const newStaffMember = new Staff({
       ...req.body,
     });

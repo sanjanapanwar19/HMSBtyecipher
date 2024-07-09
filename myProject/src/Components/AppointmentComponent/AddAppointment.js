@@ -44,7 +44,7 @@ const AddAppointment = ({ images, collaspeEvent }) => {
       errors.doctorName = "this field is necessary";
     }
     if (!appointmentItem.doctorEmail) {
-      errors.doctorName = "this field is necessary";
+      errors.doctorEmail = "this field is necessary";
     }
     if (!appointmentItem.time) {
       errors.time = "this field is necessary";

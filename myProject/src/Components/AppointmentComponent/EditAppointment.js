@@ -36,22 +36,22 @@ const EditAppointment = ({ images, collaspeEvent }) => {
     let errors = {};
 
     if (!appointment.patientName) {
-      errors.fullName = "please enter this field";
+      errors.patientName = "please enter this field";
     }
     if (!appointment.patientEmail) {
-      errors.email = "please enter this field";
+      errors.patientEmail = "please enter this field";
     }
     if (!appointment.doctorName) {
-      errors.dob = "please enter this field";
+      errors.doctorName = "please enter this field";
     }
     if (!appointment.doctorEmail) {
-      errors.contactNumber = "please enter this field";
+      errors.doctorEmail = "please enter this field";
     }
     if (!appointment.time) {
-      errors.disease = "please enter this field";
+      errors.time = "please enter this field";
     }
     if (!appointment.description) {
-      errors.bloodgroup = "please enter this field";
+      errors.description = "please enter this field";
     }
     console.log("erros in the valid inputs", errors);
     return errors;
@@ -84,9 +84,14 @@ const EditAppointment = ({ images, collaspeEvent }) => {
           setTimeout(() => {
             navigate("/appointment");
           }, 2000);
+        } else {
+          console.log("false",res.data.field,res.data.msg);
+          setErros({ [res.data.field]: res.data.msg });
         }
       } catch (err) {
-        console.log("err is", err);
+        console.log("error is", err);
+        console.log("err field", err.response.data.field);
+        console.log("err message", err.response.data.msg);
       }
     };
     fun();
@@ -139,6 +144,11 @@ const EditAppointment = ({ images, collaspeEvent }) => {
                             value={appointmentDetails.patientName}
                             onChange={handleChange}
                           />
+                          {erros.patientName && (
+                            <p className="required-validation">
+                              {erros.patientName}
+                            </p>
+                          )}
                         </div>
                         <div class="col-md-4">
                           <label for="fullname" class="custom-form-label">
@@ -153,6 +163,11 @@ const EditAppointment = ({ images, collaspeEvent }) => {
                             value={appointmentDetails.patientEmail}
                             onChange={handleChange}
                           />
+                          {erros.patientEmail && (
+                            <p className="required-validation">
+                              {erros.patientEmail}
+                            </p>
+                          )}
                         </div>
                         <div class="col-md-4">
                           <label for="" class="custom-form-label">
@@ -174,6 +189,11 @@ const EditAppointment = ({ images, collaspeEvent }) => {
                             value={appointmentDetails.doctorName}
                             onChange={handleChange}
                           />
+                          {erros.doctorName && (
+                            <p className="required-validation">
+                              {erros.doctorName}
+                            </p>
+                          )}
                         </div>
                         <div class="col-md-4">
                           <label for="fullname" class="custom-form-label">
@@ -188,6 +208,11 @@ const EditAppointment = ({ images, collaspeEvent }) => {
                             value={appointmentDetails.doctorEmail}
                             onChange={handleChange}
                           />
+                          {erros.doctorEmail && (
+                            <p className="required-validation">
+                              {erros.doctorEmail}
+                            </p>
+                          )}
                         </div>
                         <div class="col-md-4">
                           <label for="" class="custom-form-label">
@@ -209,6 +234,9 @@ const EditAppointment = ({ images, collaspeEvent }) => {
                             value={appointmentDetails.time}
                             onChange={handleChange}
                           />
+                          {erros.time && (
+                            <p className="required-validation">{erros.time}</p>
+                          )}
                         </div>
 
                         <div class="col-md-8">
@@ -224,6 +252,11 @@ const EditAppointment = ({ images, collaspeEvent }) => {
                             rows="6"
                             onChange={handleChange}
                           ></textarea>
+                          {erros.description && (
+                            <p className="required-validation">
+                              {erros.description}
+                            </p>
+                          )}
                         </div>
                         <div class="col-md-12 mt-4">
                           <button

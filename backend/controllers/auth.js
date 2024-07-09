@@ -2,6 +2,10 @@ import User from "../models/UserModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
+import multer from 'multer';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from "url";
 
 export const register = async (req, res) => {
   console.log("register api funtion ahs been called");
@@ -86,7 +90,7 @@ export const forgotPassword = async (req, res) => {
   const { email } = req.body;
   console.log("email is", email);
   if (!email) {
-    res.status(400).json({ status: false,field:"email", msg: "please enter email" });
+   return res.status(400).json({ status: false,field:"email", msg: "please enter email" });
   }
   try {
     const user = await User.findOne({ email });
@@ -197,12 +201,16 @@ export const chnagePassword = async (req, res) => {
   }
 };
 
-export const updateAdminProfile = async (req, res) => {
+
+export const updateAdminProfile =   async (req, res) => {
   console.log("update admin profile api called");
   const id = req.params.id;
   console.log("id is", id);
   const data = req.body;
   console.log("data is", data);
+  if (req.file) {
+    data.profileImage = `/uploads/profiles/${req.file.filename}`;
+  }
   try {
     const updatedLoggedUser = await User.findByIdAndUpdate(
       { _id: id },

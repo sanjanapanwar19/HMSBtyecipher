@@ -1312,6 +1312,7 @@ body {
 }
 .addProjectlogo .upload-img-box .file-upload {
   opacity: 0;
+  display: none;
 }
 .addProjectlogo h6 {
   color: #6f767e;
@@ -1389,4 +1390,9 @@ body {
 }
 .customDesign .footbutton .custom-btnCus {
   background: #ef3434;
+}
+.cusProfileCir img{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 }

@@ -43,7 +43,7 @@ const Appointment = ({ images, collaspeEvent }) => {
     const serachResult = adata.filter((item) => {
       return (
         item.patientName.toLowerCase().includes(searchStringLowerCase) ||
-        item.doctorName.toLowerCase().includes(searchStringLowerCase) 
+        item.doctorName.toLowerCase().includes(searchStringLowerCase)
       );
     });
     setAppointment(serachResult);
@@ -80,14 +80,14 @@ const Appointment = ({ images, collaspeEvent }) => {
           <div class="row mb-3">
             <div class="col-xxl-12">
               <div class="row justify-content-between align-items-center mb-3">
-                <div class="col-xxl-3">
+                <div class="col-lg-4">
                   <div class="greetingsText">
                     <div class="greetingsText-heading">
                       <h3>My Appointments</h3>
                     </div>
                   </div>
                 </div>
-                <div class="col-xxl-4 d-flex">
+                <div class="col-lg-4 d-flex">
                   <div class="buttons d-flex">
                     <Link to={"/addAppointment"} class="ctr-btn">
                       <img src={add} alt="" />
@@ -124,8 +124,10 @@ const Appointment = ({ images, collaspeEvent }) => {
                           <tr>
                             <td>A0{index + 1}</td>
                             <td>
-                              <img src="/assets/images/Ellipse 7.png" alt="" />
-                              <span>{eachAppointment.patientName}</span>
+                              <span className="d-flex align-items-center cusProfileCir">
+                                <img src={images.Ellipse} alt="" />
+                                <span>{eachAppointment.patientName}</span>
+                              </span>
                             </td>
                             <td>{eachAppointment.customD_ID}</td>
                             <td class="d-flex">

@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Header = ({ images, collaspeEvent }) => {
+  console.log("header component rendered");
   console.log("collase Event in header component", collaspeEvent);
   const [isOpen, setisOpen] = useState(false);
-  const [loggesUser, setLoggedUser] = useState(
+  const [loggedUser, setLoggedUser] = useState(
     JSON.parse(localStorage.getItem("user"))
   );
+  console.log("image in header component", loggedUser.profileImage);
   const { collasped, setCollasped } = collaspeEvent;
   const isOPenHandler = () => {
     setisOpen(!isOpen);
@@ -41,6 +43,7 @@ const Header = ({ images, collaspeEvent }) => {
               </button>
               <div class="avatar">
                 <div class="dropdown">
+                <span className="d-flex align-items-center cusProfileCir">
                   <button
                     class={`dropdown-toggle ${isOpen && "show"}`}
                     type="button"
@@ -49,12 +52,20 @@ const Header = ({ images, collaspeEvent }) => {
                     aria-expanded={isOpen ? "true" : "false"}
                     onClick={isOPenHandler}
                   >
-                    <img src={images.avatar} alt="" />
+                    <img
+                      src={
+                        loggedUser.profileImage
+                          ? `http://localhost:4000${loggedUser.profileImage}`
+                          : images.avatar
+                      }
+                      alt=""
+                    />
                     <h6>
-                      {loggesUser.name}
+                      {loggedUser.name}
                       <span>Admin</span>
                     </h6>
-                  </button>
+                    </button>
+                    </span>
                   <ul
                     class={`dropdown-menu ${isOpen && "show"}`}
                     aria-labelledby="dropdownMenuButton1"

@@ -23,6 +23,7 @@ app.use(
 );
 
 app.use(bodyParser.json());
+app.use('/uploads',express.static('uploads'))
 const connectDB = async () => {
   try {
     const connection = mongoose.connect(

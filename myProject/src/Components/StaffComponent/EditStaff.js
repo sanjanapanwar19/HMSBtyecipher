@@ -30,7 +30,7 @@ const EditStaff = ({ images, collaspeEvent }) => {
   const validateValues = (staffItem) => {
     let errors = {};
     if (!staffItem.D_ID) {
-      errors.fullName = "this field is necessary";
+      errors.D_ID = "this field is necessary";
     }
     if (staffItem.role !== "Doctor" && staffItem.role !== "Nurse") {
       errors.role = "Please select role";
@@ -165,6 +165,10 @@ const EditStaff = ({ images, collaspeEvent }) => {
                             value={staffDetails.D_ID}
                             onChange={handleChange}
                           />
+                            {erros.D_ID
+                             && (
+                            <p className="required-validation">{erros.D_ID}</p>
+                          )}
                         </div>
                         <div class="col-md-4">
                           <label for="role" class="custom-form-label">

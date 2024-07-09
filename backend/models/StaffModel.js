@@ -38,7 +38,11 @@ const staffSchema = new mongoose.Schema(
     description: {
       type: String,
     },
+    profileImage: {
+      type:String
+    },
   },
+ 
   { timestamps: true }
 );
 

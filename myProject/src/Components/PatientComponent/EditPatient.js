@@ -22,10 +22,15 @@ const EditPatient = ({ images, collaspeEvent }) => {
     const { name, value } = e.target;
     console.log("name is", name);
     console.log("value is", value);
-    setPatientDeatils((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    if (name === "profileImage") {
+      console.log("image",e.target.files[0]);
+      // setSelectImage(e.target.files[0]);
+    } else {
+      setPatientDeatils((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
   const validateValues = (patient) => {
     let errors = {};
@@ -68,11 +73,22 @@ const EditPatient = ({ images, collaspeEvent }) => {
   };
   const finishSubmiting = () => {
     const id = patientDetails._id;
+    const formData = new FormData();
+    Object.keys(patientDetails).forEach((key) => {
+       formData.append(key,patientDetails[key])
+    })
+    // if (selectImage) {
+    //   formData.append("profileImage",selectImage)
+    // }
     const fun = async (req, res) => {
       try {
         const res = await axios.put(
           `/patient/updatePatientById/${id}`,
-          patientDetails
+          formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+           }
+         }
         );
         console.log("response is", res.data);
         if (res.data.status) {
@@ -129,15 +145,16 @@ const EditPatient = ({ images, collaspeEvent }) => {
                           <div class="p-image ml-auto">
                             <label for="logoSelect">
                               <div>
-                                <img src="assets/images/editIcon.png" alt="" />
+                                <img src={images.editIcon} alt="" />
                               </div>
                             </label>
                             <input
                               class="file-upload"
                               id="logoSelect"
-                              name="projectLogo"
+                              name="profileImage"
                               type="file"
                               accept="image/*"
+                              onChange={handleChange}
                             />
                           </div>
                         </div>

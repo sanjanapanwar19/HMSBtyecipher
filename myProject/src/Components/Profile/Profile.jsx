@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Profile = ({ images, collaspeEvent }) => {
+  const [profileImage, setProfileImage] = useState(null);
   const [erros, setErros] = useState({});
   const navigate = useNavigate();
   const { collasped, setCollasped } = collaspeEvent;
@@ -23,7 +24,11 @@ const Profile = ({ images, collaspeEvent }) => {
     }));
   };
 
-  
+  const handleImageChange = (e) => {
+    console.log("handle change fun of updated profile called");
+    console.log("file is",e.target.files[0]);
+    setProfileImage(e.target.files[0]);
+  };
   const validateValues = (admin) => {
     let errors = {};
 
@@ -51,12 +56,25 @@ const Profile = ({ images, collaspeEvent }) => {
     }
   };
   const finishSubmiting = async () => {
+    console.log("finish submiting fun has been called");
+    console.log("name of logged admin", loggedAdmin.name);
+    console.log("email of logged admin",loggedAdmin.email);
+    const formData = new FormData();
+    formData.append("name", loggedAdmin.name);
+      formData.append("email", loggedAdmin.email);
+      formData.append("phoneNumber", loggedAdmin.phoneNumber);
+      if (profileImage) formData.append('profileImage', profileImage);
     const id = loggedAdmin._id;
     const fun = async (req, res) => {
       try {
         const res = await axios.put(
           `/auth/updateAdminProfile/${id}`,
-          loggedAdmin
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
         );
         console.log("res", res);
         console.log("response is", res.data);
@@ -67,7 +85,7 @@ const Profile = ({ images, collaspeEvent }) => {
             "user",
             JSON.stringify(res.data.updatedLoggedUser)
           );
-          navigate("/dashboard");
+          // navigate("/dashboard");
         }
       } catch (err) {
         console.log("error is", err);
@@ -93,37 +111,38 @@ const Profile = ({ images, collaspeEvent }) => {
                     </div>
                   </div>
 
-                  <div class="col-xxl-6 align-self-center">
-                    <img
-                      src="assets/images/profileImage.png"
-                      alt=""
-                      class="img-fluid"
-                    />
+                  <div class="col-lg-6 align-self-center">
+                    <img src={images.profileImage} alt="" class="img-fluid" />
                   </div>
 
-                  <div class="col-xxl-6 align-self-center">
+                  <div class="col-lg-6 align-self-center">
                     <form class="row g-3">
                       <div class="col-md-12">
                         <div class="addProjectlogo">
                           <div class="upload-img-box">
                             <div class="circle">
                               <img
-                                src="assets/images/dummyProfile.png"
+                                src={
+                                  profileImage
+                                    ? URL.createObjectURL(profileImage)
+                                    : `http://localhost:4000${loggedAdmin.profileImage}`
+                                }
                                 alt=""
                               />
                             </div>
                             <div class="p-image ml-auto">
                               <label for="logoSelect">
                                 <div>
-                                  <img src="assets/images/camera.png" alt="" />
+                                  <img src={images.camera} alt="" />
                                 </div>
                               </label>
                               <input
                                 class="file-upload"
                                 id="logoSelect"
-                                name="projectLogo"
+                                name="profileImage"
                                 type="file"
                                 accept="image/*"
+                                onChange={handleImageChange}
                               />
                             </div>
                           </div>
@@ -143,9 +162,7 @@ const Profile = ({ images, collaspeEvent }) => {
                           onChange={handleChange}
                         />
                         {erros.name && (
-                          <p className="required-validation">
-                            {erros.name}
-                          </p>
+                          <p className="required-validation">{erros.name}</p>
                         )}
                       </div>
                       <div class="col-md-12">
@@ -160,10 +177,8 @@ const Profile = ({ images, collaspeEvent }) => {
                           value={loggedAdmin.email}
                           onChange={handleChange}
                         />
-                          {erros.email && (
-                          <p className="required-validation">
-                            {erros.email}
-                          </p>
+                        {erros.email && (
+                          <p className="required-validation">{erros.email}</p>
                         )}
                       </div>
                       <div class="col-md-12">
@@ -179,7 +194,7 @@ const Profile = ({ images, collaspeEvent }) => {
                           value={loggedAdmin.phoneNumber}
                           onChange={handleChange}
                         />
-                          {erros.phoneNumber && (
+                        {erros.phoneNumber && (
                           <p className="required-validation">
                             {erros.phoneNumber}
                           </p>
@@ -194,8 +209,7 @@ const Profile = ({ images, collaspeEvent }) => {
                           class="custom-input-field"
                           id="address"
                           rows="4"
-                        >
-                        </textarea>
+                        ></textarea>
                       </div>
                       <div class="col-md-12 mt-4">
                         <button

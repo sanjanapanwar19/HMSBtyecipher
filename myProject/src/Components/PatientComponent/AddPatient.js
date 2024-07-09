@@ -1,14 +1,5 @@
-import dummyLogo from "../assets/images/dummy_logo.png";
-import Dashboard from "../assets/icons/Dashboard.svg";
-import appointment from "../assets/icons/appointment.svg";
-import patient from "../assets/icons/patient.svg";
-import staff from "../assets/icons/staff.svg";
 import Sidebar from "../../SideBar/Sidebar";
 import Header from "../../Header/Header";
-import collaspebtn from "../assets/icons/collaps-btn.svg";
-import avtar from "../assets/icons/avatar.png";
-import dummyProfile from "../assets/images/dummyProfile.png";
-import camera from "../assets/images/camera.png";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,6 +7,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const Addpatient = ({ images, collaspeEvent }) => {
+  const [profileImage, setProfileImage] = useState(null);
   const [erros, setErros] = useState({});
   const { collasped, setCollasped } = collaspeEvent;
   const navigate = useNavigate();
@@ -34,6 +26,11 @@ const Addpatient = ({ images, collaspeEvent }) => {
       ...prevData,
       [e.target.name]: e.target.value,
     }));
+  };
+  const handleImageChange = (e) => {
+    console.log("handle change fun of updated add patient called");
+    console.log("file is",e.target.files[0]);
+    setProfileImage(e.target.files[0]);
   };
 
   const validateValues = (patient) => {
@@ -77,8 +74,22 @@ const Addpatient = ({ images, collaspeEvent }) => {
   };
   const finishSubmiting = async () => {
     console.log("finish submiting fun of add patient called");
+    const formData = new FormData();
+    formData.append("fullName", newpatient.fullName);
+    formData.append("email", newpatient.email);
+    formData.append("dob", newpatient.dob);
+    formData.append("contactNumber", newpatient.contactNumber);
+    formData.append("disease", newpatient.disease);
+    formData.append("bloodgroup", newpatient.bloodgroup);
+    formData.append("gender", newpatient.gender);
+    formData.append("description",newpatient.description)
+    if (profileImage) formData.append("profileImage", profileImage);
     try {
-      const res = await axios.post("/patient/addPatient", newpatient);
+      const res = await axios.post("/patient/addPatient", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
+      });
       console.log("response of add patient api", res.data);
       if (res.data.status) {
         console.log("res.data.status", res.data.status);
@@ -130,12 +141,19 @@ const Addpatient = ({ images, collaspeEvent }) => {
                       <div class="addProjectlogo">
                         <div class="upload-img-box">
                           <div class="circle">
-                            <img src={dummyProfile} alt="" />
+                          <img
+                                src={
+                                  profileImage
+                                    ? URL.createObjectURL(profileImage)
+                                    : `http://localhost:4000${profileImage}`
+                                }
+                                alt=""
+                              />
                           </div>
                           <div class="p-image ml-auto">
                             <label for="logoSelect">
                               <div>
-                                <img src={camera} alt="" />
+                                <img src={images.camera} alt="" />
                               </div>
                             </label>
                             <input
@@ -144,6 +162,7 @@ const Addpatient = ({ images, collaspeEvent }) => {
                               name="projectLogo"
                               type="file"
                               accept="image/*"
+                             onChange={handleImageChange}
                             />{" "}
                           </div>
                         </div>
@@ -352,3 +371,16 @@ const Addpatient = ({ images, collaspeEvent }) => {
   );
 };
 export default Addpatient;
+
+function convertToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    };
+    fileReader.onerror = (error) => {
+      reject(error);
+    };
+  });
+}

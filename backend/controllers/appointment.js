@@ -57,7 +57,11 @@ export const viewAllAppointments = async (req, res) => {
     // }
     return res
       .status(200)
-      .json({status:true ,msg: "successfully accessed appointment data", allAppointments });
+      .json({
+        status: true,
+        msg: "successfully accessed appointment data",
+        allAppointments,
+      });
   } catch (err) {
     console.log("Error is", err);
   }
@@ -70,7 +74,11 @@ export const deleteAppointmentById = async (req, res) => {
     const deletedAppointment = await Appointment.findByIdAndDelete({ _id: id });
     res
       .status(200)
-      .json({status:true, msg: "patient member deleted sucessfully", deletedAppointment });
+      .json({
+        status: true,
+        msg: "patient member deleted sucessfully",
+        deletedAppointment,
+      });
   } catch (err) {
     console.log("error is", err);
   }
@@ -98,18 +106,32 @@ export const updateAppointmentById = async (req, res) => {
   try {
     const isExitsPatient = await Patient.findOne({ email: patientEmail });
     if (!isExitsPatient) {
-      return res.json({ status: false, msg: "unknown patient" });
+      return res
+        .status(400)
+        .json({ status: false, field: "patientName", msg: "unknown patient" });
     }
     console.log("is exists patient is", isExitsPatient);
-    if (isExitsPatient.fullName !== patientName) {
-      return res.json({ status: false, msg: "patient name or email is wrong" });
+    if (isExitsPatient.fullName.toLowerCase() !== patientName.toLowerCase()) {
+      return res.json({
+        status: false,
+        field: "patientName",
+        msg: "patient name with this email doex not exists",
+      });
     }
     const isExitsStaff = await Staff.findOne({ email: doctorEmail });
     if (!isExitsStaff) {
-      return res.json({ status: false, msg: "unknown patient" });
+      return res
+        .status(404)
+        .json({ status: false, field: "doctorName", msg: "unknown staff" });
     }
-    if (isExitsStaff.fullName !== doctorName) {
-      return res.json({ status: false, msg: "staff name or email is wrong" });
+    if (isExitsStaff.fullName.toLowerCase() !== doctorName.toLowerCase()) {
+      return res
+        .status(401)
+        .json({
+          status: false,
+          field: "doctorName",
+          msg: "staff name this email doex not exists ",
+        });
     }
     console.log("is existing staff is", isExitsStaff);
     const newObj = {
@@ -123,10 +145,10 @@ export const updateAppointmentById = async (req, res) => {
       staffId: isExitsStaff._id,
       customD_ID: isExitsStaff.D_ID,
     };
-   console.log("new updated obj",newObj);
+    console.log("new updated obj", newObj);
     const updatedPatient = await Appointment.findByIdAndUpdate(
       { _id: id },
-      { $set: newObj},
+      { $set: newObj },
       { new: true }
     );
     return res

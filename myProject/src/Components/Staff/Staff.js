@@ -32,7 +32,7 @@ const Staff = ({ images, collaspeEvent }) => {
         item.fullName.toLowerCase().includes(searchStringLowerCase) ||
         item.gender.toLowerCase().startsWith(searchStringLowerCase) ||
         item.specialization.toLowerCase().startsWith(searchStringLowerCase) ||
-        item.role.toLowerCase().startsWith(searchStringLowerCase) 
+        item.role.toLowerCase().startsWith(searchStringLowerCase)
       );
     });
     setStaffMember(serachResult);
@@ -72,14 +72,14 @@ const Staff = ({ images, collaspeEvent }) => {
           <div class="row mb-3">
             <div class="col-xxl-12">
               <div class="row justify-content-between align-items-center mb-3">
-                <div class="col-xxl-3">
+                <div class="col-lg-4">
                   <div class="greetingsText">
                     <div class="greetingsText-heading">
                       <h3>Staff</h3>
                     </div>
                   </div>
                 </div>
-                <div class="col-xxl-4 d-flex">
+                <div class="col-lg-4 d-flex">
                   <div class="buttons d-flex">
                     <Link to="/AddStaff" class="ctr-btn">
                       <img src={images.add} alt="" />
@@ -115,12 +115,21 @@ const Staff = ({ images, collaspeEvent }) => {
                           <tr>
                             <td>{index + 1}</td>
                             <td className="d-flex">
-                              <img src="" alt="" />
-                              <span>
-                                {eachStaff.fullName}
-                                <small style={{ display: "block" }}>
-                                  {eachStaff.role}
-                                </small>
+                              <span className="d-flex align-items-center cusProfileCir">
+                                <img
+                                  src={
+                                    eachStaff.profileImage
+                                      ? `http://localhost:4000${eachStaff.profileImage}`
+                                      : images.avatar
+                                  }
+                                  alt=""
+                                />
+                                <span>
+                                  {eachStaff.fullName}
+                                  <small style={{ display: "block" }}>
+                                    {eachStaff.role}
+                                  </small>
+                                </span>
                               </span>
                             </td>
                             <td>{eachStaff.specialization}</td>

@@ -33,6 +33,12 @@ const patientSchema = new mongoose.Schema(
     description: {
       type: String,
     },
+    profileImage: {
+      type: String,
+    },
+    profileImage: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

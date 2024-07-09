@@ -4,27 +4,10 @@ import router from "../routes/patient.js";
 export const addPatient = async (req, res) => {
   console.log("add patient api has been called");
   console.log("request body is", req.body);
+  if (req.file) {
+    req.body.profileImage = `/uploads/profiles/${req.file.filename}`;
+  }
   try {
-    const {
-      fullName,
-      email,
-      dob,
-      contactNumber,
-      disease,
-      bloodgroup,
-      gender,
-    } = req.body;
-    if (
-      !fullName ||
-      !email ||
-      !dob ||
-      !contactNumber ||
-      !disease ||
-      !bloodgroup ||
-      !gender
-    ) {
-      return res.status(400).json({status:false, msg: "please enter all the fields" });
-    }
     const newPatient = new Patient({
       ...req.body,
     });
@@ -50,7 +33,11 @@ export const viewAllPatient = async (req, res) => {
     // }
     return res
       .status(200)
-      .json({status:true, msg: "successfully accessed sraff members", allPatient });
+      .json({
+        status: true,
+        msg: "successfully accessed sraff members",
+        allPatient,
+      });
   } catch (err) {
     console.log("Error is", err);
   }
@@ -61,7 +48,12 @@ export const updatePatientById = async (req, res) => {
   console.log(req.params.id);
   console.log("body", req.body);
   const id = req.params.id;
-  const data = req.body;
+  const data = {
+    ...req.body,
+    profileImage: req.file
+      ? `/uploads/profiles/${req.file.filename}`
+      : req.body.profileImage,
+  };
   try {
     const updatedPatient = await Patient.findByIdAndUpdate(
       { _id: id },
@@ -83,7 +75,11 @@ export const deletePatientById = async (req, res) => {
     const deletedPatient = await Patient.findByIdAndDelete({ _id: id });
     res
       .status(200)
-      .json({status:true, msg: "staff member deleted sucessfully", deletePatientById });
+      .json({
+        status: true,
+        msg: "staff member deleted sucessfully",
+        deletePatientById,
+      });
   } catch (err) {
     console.log("error is", err);
   }

@@ -7,8 +7,8 @@ import Deletepatient from "../PatientComponent/Deletepatient";
 
 const Patient = ({ images, collaspeEvent }) => {
   console.log("patinet component rendered");
-  const [pdata, setPdata] = useState([]);
   const [patient, setPatient] = useState([]);
+  console.log("total patients are",patient);
   const [searchString, setSearchString] = useState("");
   const [isDeleteClick, setIsDeleteClick] = useState({
     flag: false,
@@ -26,26 +26,13 @@ const Patient = ({ images, collaspeEvent }) => {
     });
   };
 
-  const searchHandle = () => {
-    console.log("seach handle fun of patient component called");
-    const searchStringLowerCase = searchString.toLowerCase();
-    console.log("searchStringLowerCase", searchStringLowerCase);
-    const serachResult = pdata.filter((item) => {
-      return (
-        item.fullName.toLowerCase().includes(searchStringLowerCase) ||
-        item.disease.toLowerCase().includes(searchStringLowerCase) ||
-        item.gender.toLowerCase().startsWith(searchStringLowerCase)
-      );
-    });
-    setPatient(serachResult);
-  };
+  
   useEffect(() => {
     console.log("use effect of patient module called");
     const fun = async (req, res) => {
       try {
         const res = await axios.get("/patient/viewAllPatient");
         console.log("res", res.data.allPatient);
-        setPdata(res.data.allPatient);
         setPatient(res.data.allPatient);
       } catch (err) {
         console.log("err is", err);
@@ -53,15 +40,6 @@ const Patient = ({ images, collaspeEvent }) => {
     };
     fun();
   }, [isDeleteClick]);
-
-  useEffect(() => {
-    console.log("use effect is called when search string changes");
-    if (searchString.length > 0) {
-      searchHandle();
-    } else {
-      setPatient(pdata);
-    }
-  }, [searchString]);
   return (
     <div className="wrapper">
       <Sidebar images={images} collaspeEvent={{ collasped, setCollasped }} />
@@ -71,14 +49,14 @@ const Patient = ({ images, collaspeEvent }) => {
           <div class="row mb-3">
             <div class="col-xxl-12">
               <div class="row justify-content-between align-items-center mb-3">
-                <div class="col-xxl-3">
+                <div class="col-lg-4">
                   <div class="greetingsText">
                     <div class="greetingsText-heading">
                       <h3>Patients</h3>
                     </div>
                   </div>
                 </div>
-                <div class="col-xxl-4 d-flex">
+                <div class="col-lg-4 d-flex">
                   <div class="buttons d-flex">
                     <Link to="/AddPatient" class="ctr-btn">
                       <img src={images.add} alt="" />
@@ -88,10 +66,7 @@ const Patient = ({ images, collaspeEvent }) => {
                     type="text"
                     class="custom-input-field"
                     placeholder="Search Patient"
-                    value={searchString}
-                    onChange={(e) => {
-                      setSearchString(e.target.value);
-                    }}
+                    value=""
                   />
                 </div>
               </div>
@@ -114,8 +89,17 @@ const Patient = ({ images, collaspeEvent }) => {
                           <tr>
                             <td>{index + 1}</td>
                             <td>
-                              <img src={images.Ellipse7} alt="" />
-                              <span>{eachPatient.fullName}</span>
+                              <span className="d-flex align-items-center cusProfileCir">
+                              <img
+                      src={
+                        eachPatient.profileImage
+                          ? `http://localhost:4000${eachPatient.profileImage}`
+                          : images.avatar
+                      }
+                      alt=""
+                    />
+                                <span>{eachPatient.fullName}</span>
+                              </span>
                             </td>
                             <td>{eachPatient.disease}</td>
                             <td>{eachPatient.gender}</td>
