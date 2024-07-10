@@ -33,7 +33,7 @@ const ViewAppointment = ({ images, collaspeEvent }) => {
                           <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                               <li class="breadcrumb-item">
-                                <a href="appointment.html">Appointment</a>
+                                <Link to={"/appointment"}>Appointment</Link>
                               </li>
                               <li
                                 class="breadcrumb-item active"
@@ -89,18 +89,21 @@ const ViewAppointment = ({ images, collaspeEvent }) => {
                             disabled
                           />
                         </div>
-                        <div class="col-md-4">
+                        {/* <div class="col-md-4">
                           <label for="" class="custom-form-label">
                             Patient Image{" "}
                             <span class="required-validation">*</span>
                           </label>
+                          
                           <input
                             type="file"
                             class="custom-input-field"
                             id=""
                             disabled
                           />
-                        </div>
+                          </div> */}
+                          
+                        
                         <div class="col-md-4">
                           <label for="fullname" class="custom-form-label">
                             Doctor Id <span class="required-validation">*</span>
@@ -125,8 +128,8 @@ const ViewAppointment = ({ images, collaspeEvent }) => {
                             value={eachAppointment.doctorName}
                             disabled
                           />
-                        </div>
-                        <div class="col-md-4">
+                         </div>
+                        {/* <div class="col-md-4">
                           <label for="" class="custom-form-label">
                             Doctor Image{" "}
                             <span class="required-validation">*</span>
@@ -137,7 +140,7 @@ const ViewAppointment = ({ images, collaspeEvent }) => {
                             id=""
                             disabled
                           />
-                        </div>
+                        </div>  */}
                         <div class="col-md-4">
                           <label for="time" class="custom-form-label">
                             Time <span class="required-validation">*</span>

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const ChangePassword = ({ images, collaspeEvent }) => {
   const [erros, setErros] = useState({});
+  const [backendError, setBackendError] = useState("");
   const [passwordToggle, setPasswordToggle] = useState({
     oldPassword: false,
     newPassword: false,
@@ -56,6 +57,7 @@ const ChangePassword = ({ images, collaspeEvent }) => {
     const err = validateValues(password);
     console.log("err", err);
     setErros(err);
+    setBackendError("")
     const length = Object.keys(err).length;
     if (length === 0) {
       finishSubmiting();
@@ -82,10 +84,18 @@ const ChangePassword = ({ images, collaspeEvent }) => {
         console.log("response is", res.data);
         if (res.data.status) {
           navigate("/Dashboard");
+        } else {
+          if (res.data.filed === "oldPassword") {
+            setBackendError(res.data.msg)
+          }
         }
       } catch (err) {
         console.log("error is", err);
-        
+        if (err.response && err.response.data && err.response.data.field === "oldPassword") {
+          setBackendError(err.response.data.msg)
+        } else {
+           console.log("err",err);
+       }
       }
     };
     fun();
@@ -151,12 +161,17 @@ const ChangePassword = ({ images, collaspeEvent }) => {
                             onChange={handleChange}
                           />
                         </div>
-
-                        {erros.oldPassword && (
-                          <p className="required-validation">
-                            {erros.oldPassword}
-                          </p>
-                        )}
+                        {erros.oldPassword ? (
+                            <p className="required-validation">
+                              {erros.oldPassword}
+                            </p>
+                          ) : (
+                            backendError && (
+                              <p className="required-validation">
+                                {backendError}
+                              </p>
+                            )
+                          )}
                       </div>
                       <div class="col-md-12">
                         <label for="fullname" class="custom-form-label">

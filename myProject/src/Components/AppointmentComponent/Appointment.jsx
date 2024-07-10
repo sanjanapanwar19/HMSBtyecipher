@@ -1,15 +1,4 @@
-import dummy_logo from "../assets/images/dummy_logo.png";
-import dashboard from "../assets/icons/Dashboard.svg";
-import appointment from "../assets/icons/appointment.svg";
-import patient from "../assets/icons/patient.svg";
-import staff from "../assets/icons/staff.svg";
-import collaspeBtn from "../assets/icons/collaps-btn.svg";
-import avatar from "../assets/icons/avatar.png";
 import add from "../assets/icons/add.svg";
-import edit from "../assets/icons/Edit.svg";
-import view from "../assets/icons/view.svg";
-import Delete from "../assets/icons/Delete.svg";
-import Ellipse from "../assets/images/Ellipse 7.png";
 import Sidebar from "../../SideBar/Sidebar";
 import Header from "../../Header/Header";
 import { Link } from "react-router-dom";
@@ -18,8 +7,8 @@ import axios from "axios";
 import DeleteAppointment from "./DeleteAppointment";
 
 const Appointment = ({ images, collaspeEvent }) => {
-  const [adata, setAdata] = useState([]);
   const [appointment, setAppointment] = useState([]);
+  const [searchAppointment, setSearchAppointment] = useState('');
   const [isDeleteClick, setIsDeleteClick] = useState({
     flag: false,
     eachAppointment: {},
@@ -36,25 +25,12 @@ const Appointment = ({ images, collaspeEvent }) => {
       eachAppointment: eachAppointment,
     });
   };
-  const searchHandle = () => {
-    console.log("seach handle fun of appointment component called");
-    const searchStringLowerCase = searchString.toLowerCase();
-    console.log("searchStringLowerCase", searchStringLowerCase);
-    const serachResult = adata.filter((item) => {
-      return (
-        item.patientName.toLowerCase().includes(searchStringLowerCase) ||
-        item.doctorName.toLowerCase().includes(searchStringLowerCase)
-      );
-    });
-    setAppointment(serachResult);
-  };
   useEffect(() => {
     console.log("use effect of patient module called");
     const fun = async (req, res) => {
       try {
         const res = await axios.get("/appointment/viewAllAppointments");
         console.log("res", res.data);
-        setAdata(res.data.allAppointments);
         setAppointment(res.data.allAppointments);
       } catch (err) {
         console.log("err is", err);
@@ -63,14 +39,16 @@ const Appointment = ({ images, collaspeEvent }) => {
     fun();
   }, [isDeleteClick]);
 
-  useEffect(() => {
-    console.log("use effect is called when search string changes");
-    if (searchString.length > 0) {
-      searchHandle();
-    } else {
-      setAppointment(adata);
-    }
-  }, [searchString]);
+  const appointments = appointment.filter(value => {
+    const searchString = searchAppointment.toLowerCase();
+    return (
+      value.patientName.toLowerCase().includes(searchString) ||
+      value.doctorName.toLowerCase().includes(searchString) ||
+      value.customD_ID.toLowerCase().includes(searchString)
+      // value.gender.toLowerCase().startsWith(searchString) 
+    );
+  });
+
   return (
     <div class="wapper">
       <Sidebar images={images} collaspeEvent={{ collasped, setCollasped }} />
@@ -97,9 +75,9 @@ const Appointment = ({ images, collaspeEvent }) => {
                     type="text"
                     class="custom-input-field"
                     placeholder="Search Appointments"
-                    value={searchString}
+                    value={searchAppointment}
                     onChange={(e) => {
-                      setSearchString(e.target.value);
+                      setSearchAppointment(e.target.value);
                     }}
                   />
                 </div>
@@ -120,12 +98,19 @@ const Appointment = ({ images, collaspeEvent }) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {appointment.map((eachAppointment, index) => (
+                        {appointments.map((eachAppointment, index) => (
                           <tr>
                             <td>A0{index + 1}</td>
                             <td>
                               <span className="d-flex align-items-center cusProfileCir">
-                                <img src={images.Ellipse} alt="" />
+                                <img
+                                  src={
+                                    eachAppointment.patientImage
+                                      ? `http://localhost:4000${eachAppointment.patientImage}`
+                                      : images.avatar
+                                  }
+                                  alt=""
+                                />
                                 <span>{eachAppointment.patientName}</span>
                               </span>
                             </td>

@@ -9,7 +9,7 @@ const Patient = ({ images, collaspeEvent }) => {
   console.log("patinet component rendered");
   const [patient, setPatient] = useState([]);
   console.log("total patients are",patient);
-  const [searchString, setSearchString] = useState("");
+  const [searchPatient, setSearchPatient] = useState('');
   const [isDeleteClick, setIsDeleteClick] = useState({
     flag: false,
     eachPatient: {},
@@ -40,6 +40,15 @@ const Patient = ({ images, collaspeEvent }) => {
     };
     fun();
   }, [isDeleteClick]);
+
+  const patients = patient.filter(value => {
+    const searchString = searchPatient.toLowerCase();
+    return (
+      value.fullName.toLowerCase().includes(searchString) ||
+      value.disease.toLowerCase().includes(searchString) ||
+      value.gender.toLowerCase().startsWith(searchString) 
+    );
+  });
   return (
     <div className="wrapper">
       <Sidebar images={images} collaspeEvent={{ collasped, setCollasped }} />
@@ -66,7 +75,8 @@ const Patient = ({ images, collaspeEvent }) => {
                     type="text"
                     class="custom-input-field"
                     placeholder="Search Patient"
-                    value=""
+                    value={searchPatient}
+                    onChange={(e)=>{setSearchPatient(e.target.value)}}
                   />
                 </div>
               </div>
@@ -85,7 +95,7 @@ const Patient = ({ images, collaspeEvent }) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {patient.map((eachPatient, index) => (
+                        {patients.map((eachPatient, index) => (
                           <tr>
                             <td>{index + 1}</td>
                             <td>

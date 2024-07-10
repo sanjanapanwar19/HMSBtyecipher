@@ -7,12 +7,12 @@ const appointmentSchema = new mongoose.Schema(
     },
     patientName: {
       type: String,
-      required: true,
-      index:true
+      // required: true,
+      index: true,
     },
     patientEmail: {
       type: String,
-      required: true,
+       required: true,
     },
     staffId: {
       type: String,
@@ -21,10 +21,11 @@ const appointmentSchema = new mongoose.Schema(
     customD_ID: {
       type: String,
       required: true,
+      unique : true
     },
     doctorName: {
       type: String,
-      required: true,
+      // required: true,
     },
     doctorEmail: {
       type: String,
@@ -41,8 +42,12 @@ const appointmentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    
-    
+    patientImage: {
+      type: String,
+    },
+    doctorImage: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

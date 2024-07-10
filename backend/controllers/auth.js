@@ -163,7 +163,7 @@ export const chnagePassword = async (req, res) => {
     const user = await User.findById({ _id: id });
     console.log("user is", user);
     if (!user) {
-      return res.status(400).json({ status: false, msg: "user not found" });
+      return res.status(400).json({ status: false,field:"id", msg: "user not found" });
     }
     const validPassword = await bcrypt.compare(
       req.body.oldPassword,
@@ -172,12 +172,12 @@ export const chnagePassword = async (req, res) => {
     if (!validPassword) {
       return res
         .status(400)
-        .json({ status:false,field:"oldPassword",status: false, msg: "old passwrod is incorrect" });
+        .json({ status:false,field:"oldPassword",status: false, msg: "passwrod is incorrect" });
     }
     if (req.body.newPassword !== req.body.confirmPassword) {
       return res
         .status(400)
-        .json({status:false,field1:"password",field2:"confirmPassword",msg: "new password and confirm password should match" });
+        .json({status:false,field:"confirmPassword",msg: "new password and confirm password should match" });
     }
     const salt = bcrypt.genSaltSync(10);
     const newHashedPassword = await bcrypt.hash(

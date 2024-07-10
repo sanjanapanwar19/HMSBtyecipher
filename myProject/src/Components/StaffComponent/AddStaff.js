@@ -7,8 +7,9 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
 const AddStaff = ({ images, collaspeEvent }) => {
-  const [profileImage, setProfileImage] = useState(null);
+  // const [profileImage, setProfileImage] = useState(null);
   const [newStaff, setNewStaff] = useState({
+    profileImage: null,
     D_ID: "",
     role: "",
     fullName: "",
@@ -17,25 +18,33 @@ const AddStaff = ({ images, collaspeEvent }) => {
     contactNumber: "",
     specialization: "",
     gender: "",
+    description: "",
   });
   const [erros, setErros] = useState({});
   const { collasped, setCollasped } = collaspeEvent;
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setNewStaff((prevData) => ({
-      ...prevData,
-      [e.target.name]: e.target.value,
-    }));
+    if (e.target.name === "profileImage") {
+      console.log("profile image");
+      console.log(e.target.files[0]);
+      setNewStaff((prevData) => ({
+        ...prevData,
+        [e.target.name]: e.target.files[0],
+      }));
+    } else {
+      setNewStaff((prevData) => ({
+        ...prevData,
+        [e.target.name]: e.target.value,
+      }));
+    }
   };
 
-  const handleImageChange = (e) => {
-    console.log("handle change fun of updated add patient called");
-    console.log("file is", e.target.files[0]);
-    setProfileImage(e.target.files[0]);
-  };
   const validateValues = (staffItem) => {
     let errors = {};
+    if (!staffItem.profileImage) {
+      errors.profileImage = "please upload image";
+    }
     if (!staffItem.D_ID) {
       errors.D_ID = "this field is necessary";
     }
@@ -80,15 +89,9 @@ const AddStaff = ({ images, collaspeEvent }) => {
     console.log("finish submiting fun of ass staff module called");
     console.log("newStaff is", newStaff);
     const formData = new FormData();
-    formData.append("D_ID", newStaff.D_ID);
-    formData.append("role", newStaff.role);
-    formData.append("fullName", newStaff.fullName);
-    formData.append("email", newStaff.email);
-    formData.append("dob", newStaff.dob);
-    formData.append("contactNumber", newStaff.contactNumber);
-    formData.append("specialization", newStaff.specialization);
-    formData.append("gender", newStaff.gender);
-    if (profileImage) formData.append("profileImage", profileImage);
+    Object.keys(newStaff).forEach((key) => {
+      formData.append(key, newStaff[key]);
+    });
     try {
       const res = await axios.post("/staff/addStaff", formData, {
         headers: {
@@ -101,9 +104,15 @@ const AddStaff = ({ images, collaspeEvent }) => {
         setTimeout(() => {
           navigate("/staff");
         }, 2000);
+      } else {
+        console.log("else block of add staff module");
       }
     } catch (err) {
-      console.log("error is", err);
+      console.log("catch block of add staff module");
+      console.log("err is", err);
+      console.log("err field is", err.response.data.field);
+      console.log("err message is", err.response.data.msg);
+      setErros({[err.response.data.field]:err.response.data.msg})
     }
   };
   return (
@@ -124,7 +133,7 @@ const AddStaff = ({ images, collaspeEvent }) => {
                           <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                               <li class="breadcrumb-item">
-                                <a href="staff.html">Staff</a>
+                                <Link to={"/staff"}>Staff</Link>
                               </li>
                               <li
                                 class="breadcrumb-item active"
@@ -142,14 +151,14 @@ const AddStaff = ({ images, collaspeEvent }) => {
                       <div class="addProjectlogo">
                         <div class="upload-img-box">
                           <div class="circle">
-                          <img
-                                src={
-                                  profileImage
-                                    ? URL.createObjectURL(profileImage)
-                                    : `http://localhost:4000${profileImage}`
-                                }
-                                alt=""
-                              />
+                            <img
+                              src={
+                                newStaff.profileImage
+                                  ? URL.createObjectURL(newStaff.profileImage)
+                                  : `http://localhost:4000${newStaff.profileImage}`
+                              }
+                              alt=""
+                            />
                           </div>
                           <div class="p-image ml-auto">
                             <label for="logoSelect">
@@ -160,14 +169,22 @@ const AddStaff = ({ images, collaspeEvent }) => {
                             <input
                               class="file-upload"
                               id="logoSelect"
-                              name="projectLogo"
+                              name="profileImage"
                               type="file"
                               accept="image/*"
-                              onChange={handleImageChange}
+                              onChange={handleChange}
                             />
                           </div>
                         </div>
-                        <h6>Profile Image</h6>
+                        {erros.profileImage && (
+                          <p className="required-validation">
+                            {erros.profileImage}
+                          </p>
+                        )}
+                        <h6>
+                          Profile Image{" "}
+                          <span class="required-validation">*</span>
+                        </h6>
                       </div>
                     </div>
                     <div class="col-xxl-10">
@@ -229,7 +246,7 @@ const AddStaff = ({ images, collaspeEvent }) => {
                         </div>
                         <div class="col-md-4">
                           <label for="email" class="custom-form-label">
-                            Email
+                            Email <span class="required-validation">*</span>
                           </label>
                           <input
                             type="email"

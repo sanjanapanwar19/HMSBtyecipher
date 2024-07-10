@@ -84,6 +84,7 @@ const AddAppointment = ({ images, collaspeEvent }) => {
       }
     } catch (err) {
       console.log("error is", err);
+      setErros({general:"patient name or doctor name is wrong"})
     }
   };
 
@@ -161,13 +162,6 @@ const AddAppointment = ({ images, collaspeEvent }) => {
                             </p>
                           )}
                         </div>
-                        <div class="col-md-4">
-                          <label for="" class="custom-form-label">
-                            Patient Image{" "}
-                            <span class="required-validation">*</span>
-                          </label>
-                          <input type="file" class="custom-input-field" id="" />
-                        </div>
 
                         <div class="col-md-4">
                           <label for="doctorid" class="custom-form-label">
@@ -209,13 +203,7 @@ const AddAppointment = ({ images, collaspeEvent }) => {
                             </p>
                           )}
                         </div>
-                        <div class="col-md-4">
-                          <label for="" class="custom-form-label">
-                            Doctor Image{" "}
-                            <span class="required-validation">*</span>
-                          </label>
-                          <input type="file" class="custom-input-field" id="" />
-                        </div>
+
                         <div class="col-md-4">
                           <label for="time" class="custom-form-label">
                             Time <span class="required-validation">*</span>
@@ -253,6 +241,11 @@ const AddAppointment = ({ images, collaspeEvent }) => {
                             </p>
                           )}
                         </div>
+                        {erros.general && (
+                            <p className="required-validation">
+                              {erros.general}
+                            </p>
+                          )}
                         <div class="col-md-12 mt-4">
                           <button
                             onClick={handleAppointmentSubmit}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../../SideBar/Sidebar";
 import Header from "../../Header/Header";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -10,11 +10,12 @@ const ViewStaff = ({ images, collaspeEvent }) => {
   const { eachStaff } = location.state || {};
   console.log("eachStaff", eachStaff);
   const { collasped, setCollasped } = collaspeEvent;
+
   return (
     <div className="wrapper">
       <Sidebar images={images} collaspeEvent={{ collasped, setCollasped }} />
       <div className={`main-container ${collasped && "main-content_large"}`}>
-        <Header images={images} collaspeEvent={{ collasped, setCollasped }}/>
+        <Header images={images} collaspeEvent={{ collasped, setCollasped }} />
         <div class="content">
           <div class="row mb-3">
             <div class="col-xxl-12">
@@ -45,7 +46,14 @@ const ViewStaff = ({ images, collaspeEvent }) => {
                     <div class="addProjectlogo">
                       <div class="upload-img-box">
                         <div class="circle">
-                          <img src="assets/images/dummy_logo.png" alt="" />
+                          <img
+                            src={
+                              eachStaff.profileImage
+                                ? `http://localhost:4000${eachStaff.profileImage}`
+                                : images.avatar
+                            }
+                            alt=""
+                          />
                         </div>
                       </div>
                       <h6>Profile Image</h6>
@@ -182,13 +190,7 @@ const ViewStaff = ({ images, collaspeEvent }) => {
                           value={eachStaff.description}
                           rows="6"
                           disabled
-                        >
-                          Lorem Ipsum is simply dummy text of the printing and
-                          typesetting industry. Lorem Ipsum has been the
-                          industry's standard dummy text ever since the 1500s,
-                          when an unknown printer took a galley of type and
-                          scrambled it to make a type specimen book
-                        </textarea>
+                        ></textarea>
                       </div>
                     </form>
                   </div>

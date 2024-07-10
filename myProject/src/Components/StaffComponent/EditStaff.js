@@ -12,23 +12,36 @@ const EditStaff = ({ images, collaspeEvent }) => {
   const location = useLocation();
   const navigate = useNavigate();
   console.log("location", location.state.eachStaff);
-  const { eachStaff } = location.state;
+  const { eachStaff } = location.state || {};
   console.log("eachStaff", eachStaff);
   const [staffDetails, setStaffDeatils] = useState(eachStaff || {});
   console.log("dob is", staffDetails.dob);
   console.log("locationnnnnn", location.state);
+  const [profileImage, setProfileImage] = useState(null);
+
   const handleChange = (e) => {
     console.log("handleChange of edit staff called");
     const { name, value } = e.target;
     console.log("name is", name);
     console.log("value is", value);
-    setStaffDeatils((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    if (e.target.name === "profileImage") {
+      console.log("handle change for iamge", name, e.target.files[0]);
+      setProfileImage(e.target.files[0]);
+    } else {
+      setStaffDeatils((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
   const validateValues = (staffItem) => {
     let errors = {};
+    if (!staffItem.profileImage) {
+      errors.profileImage = "please upload image";
+    }
+    if (!staffItem.profileImage) {
+      errors.profileImage = "please upload image";
+    }
     if (!staffItem.D_ID) {
       errors.D_ID = "this field is necessary";
     }
@@ -74,21 +87,33 @@ const EditStaff = ({ images, collaspeEvent }) => {
   const finishSubmiting = async () => {
     const id = staffDetails._id;
     console.log("id is", id);
+    const formData = new FormData();
+    Object.keys(staffDetails).forEach((key) => {
+      formData.append(key, staffDetails[key]);
+    });
+    if (profileImage) {
+      formData.append("profileImage", profileImage);
+    }
     const fun = async (req, res) => {
       try {
-        const res = await axios.put(
-          `/staff/updateStaffById/${id}`,
-          staffDetails
-        );
+        const res = await axios.put(`/staff/updateStaffById/${id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
         console.log("response is", res.data);
         if (res.data.status) {
           toast.success("staff is edited sucessfully");
           setTimeout(() => {
-            navigate("/staff");
+             navigate("/staff");
           }, 2000);
+        } else {
+          console.log("else block of edit staff module");
         }
       } catch (err) {
+        console.log("catch block of edit staff modules");
         console.log("err is", err);
+        setErros({ [err.response.data.field]: err.response.data.msg });
       }
     };
     fun();
@@ -111,7 +136,7 @@ const EditStaff = ({ images, collaspeEvent }) => {
                           <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                               <li class="breadcrumb-item">
-                                <a href="staff.html">Staff</a>
+                                <Link to={"/staff"}>Staff</Link>
                               </li>
                               <li
                                 class="breadcrumb-item active"
@@ -130,23 +155,36 @@ const EditStaff = ({ images, collaspeEvent }) => {
                       <div class="addProjectlogo">
                         <div class="upload-img-box">
                           <div class="circle">
-                            <img src="assets/images/dummy_logo.png" alt="" />
+                            <img
+                              src={
+                                profileImage
+                                  ? URL.createObjectURL(profileImage)
+                                  : `http://localhost:4000${staffDetails.profileImage}`
+                              }
+                              alt=""
+                            />
                           </div>
                           <div class="p-image ml-auto">
                             <label for="logoSelect">
                               <div>
-                                <img src="assets/images/editIcon.png" alt="" />
+                                <img src={images.editIcon} alt="" />
                               </div>
                             </label>
                             <input
                               class="file-upload"
                               id="logoSelect"
-                              name="projectLogo"
+                              name="profileImage"
                               type="file"
                               accept="image/*"
+                              onChange={handleChange}
                             />
                           </div>
                         </div>
+                        {erros.profileImage && (
+                          <p className="required-validation">
+                            {erros.profileImage}
+                          </p>
+                        )}
                         <h6>Profile Image</h6>
                       </div>
                     </div>
@@ -165,8 +203,7 @@ const EditStaff = ({ images, collaspeEvent }) => {
                             value={staffDetails.D_ID}
                             onChange={handleChange}
                           />
-                            {erros.D_ID
-                             && (
+                          {erros.D_ID && (
                             <p className="required-validation">{erros.D_ID}</p>
                           )}
                         </div>
@@ -210,7 +247,7 @@ const EditStaff = ({ images, collaspeEvent }) => {
                         </div>
                         <div class="col-md-4">
                           <label for="email" class="custom-form-label">
-                            Email
+                            Email <span class="required-validation">*</span>
                           </label>
                           <input
                             type="email"

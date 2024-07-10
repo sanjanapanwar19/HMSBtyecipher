@@ -3,19 +3,17 @@ const staffSchema = new mongoose.Schema(
   {
     D_ID: {
       type: String,
-      required: true,
+      unique: true
     },
     role: {
       type: String,
-      required: true,
     },
     fullName: {
       type: String,
-      required: true,
     },
     email: {
       type: String,
-      required: true,
+      // required: true,
       unique: true,
     },
     dob: {
@@ -25,11 +23,9 @@ const staffSchema = new mongoose.Schema(
 
     contactNumber: {
       type: String,
-      required: true,
     },
     specialization: {
       type: String,
-      required: true,
     },
     gender: {
       type: String,

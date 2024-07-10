@@ -17,6 +17,7 @@ const EditPatient = ({ images, collaspeEvent }) => {
   const [patientDetails, setPatientDeatils] = useState(eachPatient || {});
   console.log("dob is", patientDetails.dob);
   console.log("locationnnnnn", location.state);
+  const [profileImage, setProfileImage] = useState(null);
   const handleChange = (e) => {
     console.log("handleChange of edit patient called");
     const { name, value } = e.target;
@@ -24,7 +25,7 @@ const EditPatient = ({ images, collaspeEvent }) => {
     console.log("value is", value);
     if (name === "profileImage") {
       console.log("image",e.target.files[0]);
-      // setSelectImage(e.target.files[0]);
+      setProfileImage(e.target.files[0]);
     } else {
       setPatientDeatils((prevData) => ({
         ...prevData,
@@ -34,7 +35,9 @@ const EditPatient = ({ images, collaspeEvent }) => {
   };
   const validateValues = (patient) => {
     let errors = {};
-
+    if (!patient.profileImage) {
+      errors.profileImage = "please upload image";
+    }
     if (!patient.fullName) {
       errors.fullName = "please enter the name of the patient";
     }
@@ -75,8 +78,11 @@ const EditPatient = ({ images, collaspeEvent }) => {
     const id = patientDetails._id;
     const formData = new FormData();
     Object.keys(patientDetails).forEach((key) => {
-       formData.append(key,patientDetails[key])
-    })
+      formData.append(key, patientDetails[key]);
+    });
+    if (profileImage) {
+      formData.append("profileImage", profileImage);
+    }
     // if (selectImage) {
     //   formData.append("profileImage",selectImage)
     // }
@@ -140,7 +146,16 @@ const EditPatient = ({ images, collaspeEvent }) => {
                       <div class="addProjectlogo">
                         <div class="upload-img-box">
                           <div class="circle">
-                            <img src="assets/images/dummy_logo.png" alt="" />
+                          <img
+                              src={
+                                profileImage
+                                  ? URL.createObjectURL(
+                                     profileImage
+                                    )
+                                  : `http://localhost:4000${patientDetails.profileImage}`
+                              }
+                              alt=""
+                            />
                           </div>
                           <div class="p-image ml-auto">
                             <label for="logoSelect">

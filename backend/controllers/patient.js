@@ -7,6 +7,14 @@ export const addPatient = async (req, res) => {
   if (req.file) {
     req.body.profileImage = `/uploads/profiles/${req.file.filename}`;
   }
+  const patientEmail = await Staff.findOne({ email:req.body.email });
+    if (patientEmail) {
+      return res.status(400).json({
+        status: false,
+        field: "email",
+        msg: "patient email is already register",
+      });
+    }
   try {
     const newPatient = new Patient({
       ...req.body,

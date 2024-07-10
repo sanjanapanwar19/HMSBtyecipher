@@ -22,7 +22,7 @@ const DeleteStaff = ({ data }) => {
         const res = await axios.delete(`/staff/deleteStaffById/${id}`);
         console.log("res is", res.data);
         if (res.data.status) {
-          toast.success("staff is added sucessfully");
+          toast.success("staff is deleted sucessfully");
           setTimeout(() => {
             deleteHanlde(false, eachStaff);
           }, 1000);

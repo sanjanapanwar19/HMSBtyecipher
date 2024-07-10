@@ -21,12 +21,12 @@ export const addAppointment = async (req, res) => {
   try {
     const isExitsPatient = await Patient.findOne({ email: patientEmail });
     if (!isExitsPatient) {
-      return res.json({ status: false, msg: "unknown patient" });
+      return res.status(404).json({ status: false, msg: "unknown patient" });
     }
     console.log("is exists patient is", isExitsPatient);
     const isExitsStaff = await Staff.findOne({ email: doctorEmail });
     if (!isExitsStaff) {
-      return res.json({ status: false, msg: "unknown patient" });
+      return res.json({ status: false, msg: "unknown staff" });
     }
     console.log("is existing staff is", isExitsStaff);
     const newAppointment = new Appointment({
@@ -35,6 +35,8 @@ export const addAppointment = async (req, res) => {
       staffId: isExitsStaff._id,
       customD_ID: isExitsStaff.D_ID,
       patientDob: isExitsPatient.dob,
+      patientImage: isExitsPatient.profileImage,
+      doctorImage : isExitsStaff.profileImage
     });
     const bookedAppointment = await newAppointment.save();
     console.log("booked appointment is", bookedAppointment);

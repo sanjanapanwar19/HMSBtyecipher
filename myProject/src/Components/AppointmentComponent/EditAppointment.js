@@ -85,7 +85,7 @@ const EditAppointment = ({ images, collaspeEvent }) => {
             navigate("/appointment");
           }, 2000);
         } else {
-          console.log("false",res.data.field,res.data.msg);
+          console.log("false", res.data.field, res.data.msg);
           setErros({ [res.data.field]: res.data.msg });
         }
       } catch (err) {
@@ -169,13 +169,7 @@ const EditAppointment = ({ images, collaspeEvent }) => {
                             </p>
                           )}
                         </div>
-                        <div class="col-md-4">
-                          <label for="" class="custom-form-label">
-                            Patient Image{" "}
-                            <span class="required-validation">*</span>
-                          </label>
-                          <input type="file" class="custom-input-field" id="" />
-                        </div>
+
                         <div class="col-md-4">
                           <label for="fullname" class="custom-form-label">
                             Doctor Name{" "}
@@ -214,13 +208,7 @@ const EditAppointment = ({ images, collaspeEvent }) => {
                             </p>
                           )}
                         </div>
-                        <div class="col-md-4">
-                          <label for="" class="custom-form-label">
-                            Doctor Image{" "}
-                            <span class="required-validation">*</span>
-                          </label>
-                          <input type="file" class="custom-input-field" id="" />
-                        </div>
+
                         <div class="col-md-4">
                           <label for="time" class="custom-form-label">
                             Time <span class="required-validation">*</span>

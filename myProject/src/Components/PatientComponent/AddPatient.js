@@ -7,35 +7,42 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const Addpatient = ({ images, collaspeEvent }) => {
-  const [profileImage, setProfileImage] = useState(null);
   const [erros, setErros] = useState({});
   const { collasped, setCollasped } = collaspeEvent;
   const navigate = useNavigate();
   const [newpatient, setNewpatient] = useState({
+    profileImage: null,
     fullName: "",
     email: "",
     dob: "",
     contactNumber: "",
     disease: "",
     bloodgroup: "",
+    gender:"",
     description: "",
   });
 
   const handleChange = (e) => {
-    setNewpatient((prevData) => ({
-      ...prevData,
-      [e.target.name]: e.target.value,
-    }));
-  };
-  const handleImageChange = (e) => {
-    console.log("handle change fun of updated add patient called");
-    console.log("file is",e.target.files[0]);
-    setProfileImage(e.target.files[0]);
+    if (e.target.name === "profileImage") {
+      console.log("profile image");
+      console.log(e.target.files[0]);
+      setNewpatient((prevData) => ({
+        ...prevData,
+        [e.target.name]: e.target.files[0],
+      }));
+    } else {
+      setNewpatient((prevData) => ({
+        ...prevData,
+        [e.target.name]: e.target.value,
+      }));
+    }
   };
 
   const validateValues = (patient) => {
     let errors = {};
-
+    if (!patient.profileImage) {
+      errors.profileImage = "please upload image";
+    }
     if (!patient.fullName) {
       errors.fullName = "please enter the name of the patient";
     }
@@ -75,20 +82,14 @@ const Addpatient = ({ images, collaspeEvent }) => {
   const finishSubmiting = async () => {
     console.log("finish submiting fun of add patient called");
     const formData = new FormData();
-    formData.append("fullName", newpatient.fullName);
-    formData.append("email", newpatient.email);
-    formData.append("dob", newpatient.dob);
-    formData.append("contactNumber", newpatient.contactNumber);
-    formData.append("disease", newpatient.disease);
-    formData.append("bloodgroup", newpatient.bloodgroup);
-    formData.append("gender", newpatient.gender);
-    formData.append("description",newpatient.description)
-    if (profileImage) formData.append("profileImage", profileImage);
+    Object.keys(newpatient).forEach((key) => {
+      formData.append(key, newpatient[key]);
+    });
     try {
       const res = await axios.post("/patient/addPatient", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-        }
+        },
       });
       console.log("response of add patient api", res.data);
       if (res.data.status) {
@@ -102,6 +103,7 @@ const Addpatient = ({ images, collaspeEvent }) => {
       }
     } catch (err) {
       console.log("error is", err);
+      setErros({[err.response.data.field]:err.response.data.msg})
     }
   };
   return (
@@ -141,14 +143,14 @@ const Addpatient = ({ images, collaspeEvent }) => {
                       <div class="addProjectlogo">
                         <div class="upload-img-box">
                           <div class="circle">
-                          <img
-                                src={
-                                  profileImage
-                                    ? URL.createObjectURL(profileImage)
-                                    : `http://localhost:4000${profileImage}`
-                                }
-                                alt=""
-                              />
+                            <img
+                              src={
+                                newpatient.profileImage
+                                  ? URL.createObjectURL(newpatient.profileImage)
+                                  : `http://localhost:4000${newpatient.profileImage}`
+                              }
+                              alt=""
+                            />
                           </div>
                           <div class="p-image ml-auto">
                             <label for="logoSelect">
@@ -159,13 +161,18 @@ const Addpatient = ({ images, collaspeEvent }) => {
                             <input
                               class="file-upload"
                               id="logoSelect"
-                              name="projectLogo"
+                              name="profileImage"
                               type="file"
                               accept="image/*"
-                             onChange={handleImageChange}
+                              onChange={handleChange}
                             />{" "}
                           </div>
                         </div>
+                        {erros.profileImage && (
+                          <p className="required-validation">
+                            {erros.profileImage}
+                          </p>
+                        )}
                         <h6>Profile Image</h6>
                       </div>
                     </div>
@@ -192,7 +199,7 @@ const Addpatient = ({ images, collaspeEvent }) => {
                         </div>
                         <div class="col-md-4">
                           <label for="email" class="custom-form-label">
-                            Email
+                            Email <span class="required-validation">*</span>
                           </label>
                           <input
                             type="email"

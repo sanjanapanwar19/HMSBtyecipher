@@ -11,7 +11,7 @@ const ViewPatient = ({ images, collaspeEvent }) => {
   const location = useLocation();
   console.log("useLocation in view  patient component", location.state.eachPatient);
   const { eachPatient } = location.state || {};
-  console.log("eachStaff", eachPatient);
+  console.log("each patient", eachPatient);
   const { collasped, setCollasped } = collaspeEvent;
   return (
     <div className="wrapper">
@@ -48,7 +48,14 @@ const ViewPatient = ({ images, collaspeEvent }) => {
                     <div class="addProjectlogo">
                       <div class="upload-img-box">
                         <div class="circle">
-                          <img src="assets/images/dummy_logo.png" alt="" />
+                        <img
+                            src={
+                              eachPatient.profileImage
+                                ? `http://localhost:4000${eachPatient.profileImage}`
+                                : images.avatar
+                            }
+                            alt=""
+                          />
                         </div>
                       </div>
                       <h6>Profile Image</h6>
